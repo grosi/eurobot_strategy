@@ -174,15 +174,28 @@ for i = 1:nodes_quantity
 end
 
 %% 6. Prim algortihm -> min. spanning tree (MST)
+tree_node_connections = prim_alg(nodes_quantity, node_edge_weight, ...
+     nodes_x_positions, nodes_y_positions, LINE_TREE_COLOR, LINE_LINE_WIDTH);
 
-tree_node_connections = prim_alg(nodes_quantity, start_node, node_edge_weight, ...
-    nodes_x_positions, nodes_y_positions, LINE_TREE_COLOR, LINE_LINE_WIDTH);
 
 
 
 %% 7. Dijstra alogrithm
+dijkstra_simple(node_edge_weight,1,12)
+% => problem: destination must be *bekannt*
 
-
+%% 8. TSP
+n = 30;
+%xy = 10*rand(n,2);
+xy = [nodes_x_positions nodes_y_positions];
+popSize = 60; 
+numIter = 1e4;
+showProg = 1;
+showResult = 1;
+a = meshgrid(1:n);
+%dmat = reshape(sqrt(sum((xy(a,:)-xy(a',:)).^2,2)),n,n); %Gewichte zwischen den Knoten
+dmat = node_edge_weight;
+[optRoute,minDist] = tspofs_ga(xy,dmat,popSize,numIter,showProg,showResult);
 
 
 
