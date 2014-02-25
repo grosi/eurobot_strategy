@@ -21,14 +21,13 @@ MARKER_START_COLOR = 'g';
 MARKER_ODD_COLOR = 'm';
 MARKER_CLUSTER_COLOR = 'b';
 LINE_TREE_COLOR = 'g';
+LINE_GRID_COLORSHAPE = 'k--';
 
 
 % play ground %
 PLAYGROUND_IMAGE = imread('res/playground_small','png');
 PLAYGROUND_IMAGE_WIDTH = size(PLAYGROUND_IMAGE,2);
 PLAYGROUND_IMAGE_HEIGHT = size(PLAYGROUND_IMAGE,1);
-imshow(PLAYGROUND_IMAGE);
-hold on;
 
 
 % global game settings %
@@ -38,11 +37,25 @@ PLAYGROUND_HEIGHT = 2; % height in meter
 
 
 % strategy settings %
-
+STRATEGY_TRACK_ENEMY_GRID_SIZE_X = 10e-2; %10cm
+STRATEGY_TRACK_ENEMY_GRID_SIZE_Y = 10e-2; %10cm
+STRATEGY_TRACK_CENTER_WEIGHT = 2;
+STRATEGY_TRACK_FRAME_WEIGHT = 1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Code
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 0. generate the figures
+ENEMYAREA = figure();
+set(gca,'YDir','Reverse'); % y-axes mirrored
+xlim([0 PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X+1]);
+ylim([0 PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y+1]);
+hold on;
+PLAYAREA = figure();
+imshow(PLAYGROUND_IMAGE);
+hold on;
+
+
 %% 1. set node quantity 
 nodes_quantity = 10;
 %nodes_quantity = input('how many strategy nodes? : ');
@@ -161,8 +174,26 @@ end
 %     end
 % end
 
+%% 5 start game
+% init variables
+strategy_track_enemy_grid = zeros(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y, ...
+    PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X);
+
+% a loop with 90 iterations (one for every second)  
+for seconds = 1:PLAY_TIME
+    %set the position of the enemy robo
+    figure(PLAYAREA);
+    strategy_track_enemy_grid = track_enemy(PLAYGROUND_IMAGE_HEIGHT,PLAYGROUND_IMAGE_WIDTH,...
+        PLAYGROUND_HEIGHT,PLAYGROUND_WIDTH,STRATEGY_TRACK_ENEMY_GRID_SIZE_X,STRATEGY_TRACK_ENEMY_GRID_SIZE_Y,...
+        strategy_track_enemy_grid,STRATEGY_TRACK_CENTER_WEIGHT,STRATEGY_TRACK_FRAME_WEIGHT);
+    figure(ENEMYAREA);
+    imagesc(strategy_track_enemy_grid);
+    
+end
+
 
 %% 5. complete graph G = f(V,E); E=VxV
+figure(PLAYAREA);
 node_edge_to_node = zeros(nodes_quantity,nodes_quantity);
 node_edge_weight = zeros(nodes_quantity,nodes_quantity);
 for i = 1:nodes_quantity
