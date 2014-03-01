@@ -1,5 +1,5 @@
 function [ tree_node_connections ] = prim_alg(nodes_quantity, node_edge_weight, ...
-    nodes_x_positions, nodes_y_positions, LINE_TREE_COLOR, LINE_LINE_WIDTH)
+    nodes, LINE_TREE_COLOR, LINE_LINE_WIDTH)
 %prim_alg Prims Algorithm for a min. spanning tree
 %   todo: implement a priority-queue
 %
@@ -39,8 +39,8 @@ while (e<l)
     source(e)=s;
     destination(e)=d;
     
-    plot([nodes_x_positions(source(e)) nodes_x_positions(destination(e))],...
-                 [nodes_y_positions(source(e)) nodes_y_positions(destination(e))],LINE_TREE_COLOR,'LineWidth',LINE_LINE_WIDTH);
+    plot([nodes(source(e)).x nodes(destination(e)).x],...
+                 [nodes(source(e)).y nodes(destination(e)).y],LINE_TREE_COLOR,'LineWidth',LINE_LINE_WIDTH);
     
     tree_node_connections(source(e),destination(e)) = node_edge_weight(source(e),destination(e));
     tree_node_connections(destination(e),source(e)) = node_edge_weight(source(e),destination(e));
