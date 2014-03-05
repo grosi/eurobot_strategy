@@ -32,6 +32,7 @@ PLAYGROUND_IMAGE_HEIGHT = size(PLAYGROUND_IMAGE,1);
 
 % global game settings %
 PLAY_TIME = 90; % time in seconds 
+ROBO_AVERAGE_SPEED = 0.5; % m/s
 TOTAL_POINTS = 21; % total points
 PLAYGROUND_WIDTH = 3; % width in meter
 PLAYGROUND_HEIGHT = 2; % height in meter
@@ -40,8 +41,8 @@ PLAYGROUND_HEIGHT = 2; % height in meter
 % strategy settings %
 STRATEGY_TRACK_ENEMY_GRID_SIZE_X = 10e-2; %10cm
 STRATEGY_TRACK_ENEMY_GRID_SIZE_Y = 10e-2; %10cm
-STRATEGY_TRACK_CENTER_WEIGHT = 10;
-STRATEGY_TRACK_FRAME_WEIGHT = 5;
+STRATEGY_TRACK_CENTER_WEIGHT = 2;
+STRATEGY_TRACK_FRAME_WEIGHT = 1;
 STRATEGY_TRACK_TRESHHOLD = 5;
 
 % node settings %
@@ -81,7 +82,7 @@ NODE_FRESCO_1_2_X_POSITION = 1.65; % [m]
 NODE_FRESCO_1_2_Y_POSITION = 0.2; % [m]
 
 % fire
-NODE_FIRE_TIME = 1; %[s]
+NODE_FIRE_TIME = 2; %[s]
 NODE_FIRE_POINT = 1;
 NODE_FIRE_PERCENT_OF_POINTS = 3*NODE_FIRE_POINT/TOTAL_POINTS/3;
 NODE_FIRE_1_X_POSITION = 2.10; % [m]
@@ -104,8 +105,17 @@ title('Gegener Position');
 hold on;
 % node-weight development
 NODEWEIGHT = figure();
+subplot(221);
 xlim([0 PLAY_TIME]);
 title('Knotengewichte');
+hold on;
+subplot(222);
+xlim([0 PLAY_TIME]);
+title('Gewicht-Gewicht');
+hold on;
+subplot(223);
+xlim([0 PLAY_TIME]);
+title('Empty');
 hold on;
 % playground
 PLAYAREA = figure();
@@ -230,14 +240,14 @@ nodes(11).cluster = 0; %number of the other node
 nodes(11).child = 0;
 
 % start
-% nodes(7).points = NODE_START_POINT;
-% nodes(7).percent = NODE_START_PERCENT_OF_POINTS;
-% nodes(7).time = NODE_START_TIME;
-% nodes(7).x = (NODE_START_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-% nodes(7).y = (NODE_START_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-% nodes(7).weight = 0;
-% nodes(7).cluster = 0; %number of the other node
-% nodes(7).child = 0;
+% nodes(12).points = NODE_START_POINT;
+% nodes(12).percent = NODE_START_PERCENT_OF_POINTS;
+% nodes(12).time = NODE_START_TIME;
+% nodes(12).x = (NODE_START_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+% nodes(12).y = (NODE_START_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+% nodes(12).weight = 0;
+% nodes(12).cluster = 0; %number of the other node
+% nodes(12).child = 0;
 
 
 % plot the nodes
@@ -330,7 +340,9 @@ end
 
 
 %% 4. mark the start node
+% init variables
 repeat = 1;
+node_count = 1;
 disp('mark the start node');
 while repeat == 1
     [tmp_x,tmp_y]=ginput(1);
@@ -340,11 +352,14 @@ while repeat == 1
                 if tmp_y < nodes(i).y + MARKER_SIZE/2
                     if tmp_y > nodes(i).y - MARKER_SIZE/2
                         start_node = i;
-                        busy_node_time = nodes(start_node).time;
+                        way_time = sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-NODE_START_X_POSITION))^2 ...
+                            +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-NODE_START_Y_POSITION))^2)/ROBO_AVERAGE_SPEED;
+                        busy_node_time = nodes(start_node).time + way_time;
                         set(nodes(i).child,'Color',MARKER_START_COLOR);
                         if nodes(start_node).cluster ~= 0
                             set(nodes(nodes(start_node).cluster).child,'Visible','off');
                             nodes(nodes(start_node).cluster).child = 0; 
+                            node_count = node_count + 1; % count the completed nodes
                         end
                         repeat = 0;
                         break;
@@ -364,7 +379,8 @@ strategy_track_enemy_grid = zeros(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SI
     PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X);
 weight_history = zeros(NODE_QUANTITY,PLAY_TIME);
 time = zeros(NODE_QUANTITY,PLAY_TIME);
-node_count = 1;
+ww1 = 1;
+ww2 = 0;
 
 % a loop with 90 iterations (one for every second)  
 for seconds = 1:PLAY_TIME
@@ -378,30 +394,56 @@ for seconds = 1:PLAY_TIME
     imagesc(strategy_track_enemy_grid);
     colorbar;
     
-    if busy_node_time == 0
+    if busy_node_time <= 0
     
         next_node.weight = inf;%node_edge_weight(start_node,1);
 
         for i = 1:nodes_quantity
             if nodes(i).child ~= 0 && i ~= start_node
-                nodes(i).weight = node_weight(seconds,strategy_track_enemy_grid,nodes(i),...
-                    PLAYGROUND_IMAGE_WIDTH,PLAYGROUND_IMAGE_HEIGHT,PLAYGROUND_WIDTH,PLAYGROUND_HEIGHT,...
-                    STRATEGY_TRACK_ENEMY_GRID_SIZE_X,STRATEGY_TRACK_ENEMY_GRID_SIZE_Y);
+%                 nodes(i).weight = node_weight(seconds,strategy_track_enemy_grid,nodes(i),...
+%                     PLAYGROUND_IMAGE_WIDTH,PLAYGROUND_IMAGE_HEIGHT,PLAYGROUND_WIDTH,PLAYGROUND_HEIGHT,...
+%                     STRATEGY_TRACK_ENEMY_GRID_SIZE_X,STRATEGY_TRACK_ENEMY_GRID_SIZE_Y)
+% 
+%                 node_edge_weight(start_node,i) = (sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
+%                     +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2))/ROBO_AVERAGE_SPEED+...
+%                     nodes(i).weight
+                
+%                 node_edge_weight(start_node,i) = node_weight(PLAY_TIME-seconds,PLAY_TIME,strategy_track_enemy_grid,nodes(start_node),nodes(i),...
+%                     PLAYGROUND_IMAGE_WIDTH,PLAYGROUND_IMAGE_HEIGHT,PLAYGROUND_WIDTH,PLAYGROUND_HEIGHT,...
+%                     STRATEGY_TRACK_ENEMY_GRID_SIZE_X,STRATEGY_TRACK_ENEMY_GRID_SIZE_Y);
+                
+                
+                ww1 = (PLAY_TIME-seconds)/PLAY_TIME;
+                ww2 = (PLAY_TIME-(PLAY_TIME-seconds))/PLAY_TIME;
 
-                node_edge_weight(start_node,i) = sqrt((abs(nodes(start_node).x-nodes(i).x))^2+(abs(nodes(start_node).y-nodes(i).y))^2)+...
-                    nodes(i).weight;
+                w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                
+                w_enemy = strategy_track_enemy_grid(...
+                    ceil(nodes(i).y/(PLAYGROUND_IMAGE_HEIGHT/(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y))),...
+                    ceil(nodes(i).x/(PLAYGROUND_IMAGE_WIDTH/(PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X))));
+                nodes(i).weight = w_dest;
 
+                w_src_dest = sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
+                     +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2);
+                
+                node_edge_weight(start_node,i) = ww1 * w_dest + ww2 * w_enemy + w_src_dest;
+                
+                % find the best node (lowest weight)
                 if next_node.weight > node_edge_weight(start_node,i)
                     next_node.node = i;
+                    next_node.time = w_src_dest/ROBO_AVERAGE_SPEED;
                     next_node.weight = node_edge_weight(start_node,i);
                 end
             end
         end
 
         %
-        % plot informations
+        % plot informations in playground
         %
         figure(PLAYAREA);
+        % draw route
+        plot([nodes(start_node).x nodes(next_node.node).x],[nodes(start_node).y nodes(next_node.node).y],LINE_TREE_COLOR,'LineWidth',2);
+        
         % disable the last and now completed node
         set(nodes(start_node).child,'Visible','off');
         nodes(start_node).child = 0;
@@ -411,31 +453,36 @@ for seconds = 1:PLAY_TIME
         if nodes(next_node.node).cluster ~= 0
             set(nodes(nodes(next_node.node).cluster).child,'Visible','off');
             nodes(nodes(next_node.node).cluster).child = 0; 
+            node_count = node_count + 1; % count the completed nodes
         end
-        busy_node_time = nodes(start_node).time; %reset the busy-timer
+        busy_node_time = nodes(start_node).time + next_node.time; %reset the busy-timer
         
         node_count = node_count + 1; % count the completed nodes
         
-        title('Spielfeld; verbleibende Knoten:'+num2str(nodes_quantity-node_count));
-    
+        % check if still incomplete nodes avaiable
         if node_count == nodes_quantity;
             break;
         end
     end
     
-    
-
-    
     busy_node_time = busy_node_time - 1;
 
+    %
+    % result display
+    %
+    figure(PLAYAREA);
+    title(strcat('Spielfeld; verbleibende Knoten:',num2str(nodes_quantity-node_count), ...
+        '; Zeit: ',num2str(seconds),'s; Knotenzeit: ',num2str(busy_node_time),'s'));
+    
     figure(NODEWEIGHT);
-    for i = 1:nodes_quantity
-       weight_history(i,seconds) = nodes(i).weight;
-       time(i,:) = 1:PLAY_TIME;
-    end
+    subplot(222);
+    plot(seconds,ww1,'ro');
+    plot(seconds,ww2,'bo');
     
-    plot([time(:,seconds)],[weight_history(:,seconds)],'o');
-    
+    subplot(221);
+    plot(seconds,nodes(1).weight*ww1,'o'); %ball node
+    plot(seconds,nodes(7).weight*ww1,'x'); %fresco node
+    plot(seconds,nodes(9).weight*ww1,'-'); %fire node  
 end
 
 
@@ -449,22 +496,22 @@ end
 
 
 %% 5. complete graph G = f(V,E); E=VxV
-figure(PLAYAREA);
-node_edge_to_node = zeros(nodes_quantity,nodes_quantity);
-node_edge_weight = zeros(nodes_quantity,nodes_quantity);
-for i = 1:nodes_quantity
-    for j = 1:nodes_quantity
-        dx = abs(nodes_x_positions(j)-nodes_x_positions(i));
-        dy = abs(nodes_y_positions(j)-nodes_y_positions(i));
-        
-        if dx > 0 || dy > 0
-            node_edge_to_node(i,j) = j;
-            node_edge_weight(i,j) = sqrt(dx^2 + dy^2);
-            plot([nodes_x_positions(i) nodes_x_positions(j)],...
-                [nodes_y_positions(i) nodes_y_positions(j)]);
-        end
-    end
-end
+% figure(PLAYAREA);
+% node_edge_to_node = zeros(nodes_quantity,nodes_quantity);
+% node_edge_weight = zeros(nodes_quantity,nodes_quantity);
+% for i = 1:nodes_quantity
+%     for j = 1:nodes_quantity
+%         dx = abs(nodes_x_positions(j)-nodes_x_positions(i));
+%         dy = abs(nodes_y_positions(j)-nodes_y_positions(i));
+%         
+%         if dx > 0 || dy > 0
+%             node_edge_to_node(i,j) = j;
+%             node_edge_weight(i,j) = sqrt(dx^2 + dy^2);
+%             plot([nodes_x_positions(i) nodes_x_positions(j)],...
+%                 [nodes_y_positions(i) nodes_y_positions(j)]);
+%         end
+%     end
+% end
 
 
 
@@ -487,10 +534,10 @@ end
 
 
 %% 6. Prim algortihm -> min. spanning tree (MST)
-tree_node_connections = prim_alg(nodes_quantity, node_edge_weight, ...
-     nodes_x_positions, nodes_y_positions, LINE_TREE_COLOR, LINE_LINE_WIDTH);
-
-
+% tree_node_connections = prim_alg(nodes_quantity, node_edge_weight, ...
+%      nodes_x_positions, nodes_y_positions, LINE_TREE_COLOR, LINE_LINE_WIDTH);
+% 
+% 
 
 
 %% 7. Dijstra alogrithm
