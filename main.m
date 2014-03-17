@@ -138,7 +138,7 @@ nodes(1).x = (NODE_BALL_1_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(1).y = (NODE_BALL_1_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(1).weight = 0;
 nodes(1).weighttext = text(nodes(1).x-MARKER_SIZE,nodes(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(1).cluster = 0; %number of the other node
+nodes(1).pool_id = 0; %ID of the pool
 nodes(1).child = 0;
 
 % ball 2
@@ -150,7 +150,7 @@ nodes(2).x = (NODE_BALL_1_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(2).y = (NODE_BALL_1_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(2).weight = 0;
 nodes(2).weighttext = text(nodes(2).x-MARKER_SIZE,nodes(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(2).cluster = 0; %number of the other node
+nodes(2).pool_id = 0; %ID of the pool
 nodes(2).child = 0;
 
 % ball 3
@@ -162,7 +162,7 @@ nodes(3).x = (NODE_BALL_2_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(3).y = (NODE_BALL_2_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(3).weight = 0;
 nodes(3).weighttext = text(nodes(3).x-MARKER_SIZE,nodes(3).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(3).cluster = 0; %number of the other node
+nodes(3).pool_id = 0; %ID of the pool
 nodes(3).child = 0;
 
 % ball 4
@@ -174,7 +174,7 @@ nodes(4).x = (NODE_BALL_2_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(4).y = (NODE_BALL_2_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(4).weight = 0;
 nodes(4).weighttext = text(nodes(4).x-MARKER_SIZE,nodes(4).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(4).cluster = 0; %number of the other node
+nodes(4).pool_id = 0; %ID of the pool
 nodes(4).child = 0;
 
 % ball 5
@@ -186,7 +186,7 @@ nodes(5).x = (NODE_BALL_3_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(5).y = (NODE_BALL_3_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(5).weight = 0;
 nodes(5).weighttext = text(nodes(5).x-MARKER_SIZE,nodes(5).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(5).cluster = 0; %number of the other node
+nodes(5).pool_id = 0; %ID of the pool
 nodes(5).child = 0;
 
 % ball 6
@@ -198,7 +198,7 @@ nodes(6).x = (NODE_BALL_3_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(6).y = (NODE_BALL_3_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(6).weight = 0;
 nodes(6).weighttext = text(nodes(6).x-MARKER_SIZE,nodes(6).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(6).cluster = 0; %number of the other node
+nodes(6).pool_id = 0; %ID of the pool
 nodes(6).child = 0;
 
 % fresco 1
@@ -210,7 +210,7 @@ nodes(7).x = (NODE_FRESCO_1_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDT
 nodes(7).y = (NODE_FRESCO_1_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(7).weight = 0;
 nodes(7).weighttext = text(nodes(7).x-MARKER_SIZE,nodes(7).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(7).cluster = 0; %number of the other node
+nodes(7).pool_id = 0; %ID of the pool
 nodes(7).child = 0;
 
 % fresco 2
@@ -222,7 +222,7 @@ nodes(8).x = (NODE_FRESCO_1_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDT
 nodes(8).y = (NODE_FRESCO_1_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(8).weight = 0;
 nodes(8).weighttext = text(nodes(8).x-MARKER_SIZE,nodes(8).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(8).cluster = 0; %number of the other node
+nodes(8).pool_id = 0; %ID of the pool
 nodes(8).child = 0;
 
 % fire 1
@@ -234,7 +234,7 @@ nodes(9).x = (NODE_FIRE_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(9).y = (NODE_FIRE_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(9).weight = 0;
 nodes(9).weighttext = text(nodes(9).x-MARKER_SIZE,nodes(9).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(9).cluster = 0; %number of the other node
+nodes(9).pool_id = 0; %ID of the pool
 nodes(9).child = 0;
 
 % fire 2
@@ -246,7 +246,7 @@ nodes(10).x = (NODE_FIRE_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(10).y = (NODE_FIRE_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(10).weight = 0;
 nodes(10).weighttext = text(nodes(10).x-MARKER_SIZE,nodes(10).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(10).cluster = 0; %number of the other node
+nodes(10).pool_id = 0; %ID of the pool
 nodes(10).child = 0;
 
 % fire 3
@@ -258,7 +258,7 @@ nodes(11).x = (NODE_FIRE_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(11).y = (NODE_FIRE_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 nodes(11).weight = 0;
 nodes(11).weighttext = text(nodes(11).x-MARKER_SIZE,nodes(11).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-nodes(11).cluster = 0; %number of the other node
+nodes(11).pool_id = 0; %ID of the pool
 nodes(11).child = 0;
 
 % start
@@ -269,7 +269,7 @@ nodes(11).child = 0;
 % nodes(12).x = (NODE_START_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 % nodes(12).y = (NODE_START_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
 % nodes(12).weight = 0;
-% nodes(12).cluster = 0; %number of the other node
+% nodes(12).pool_id = 0; %ID of the pool
 % nodes(12).child = 0;
 
 
@@ -283,81 +283,84 @@ for i = 1:nodes_quantity
 end
 
 
-%% 5. select clusters
+%% 5. select pools
+% set the pool quantity
 repeat = 1;
-cluster_quantity = input('how many clusters (2er pairs): ');
+pool_quantity = input('how many node-pools: ');
 while repeat == 1
-    if cluster_quantity > nodes_quantity/2
-        cluster_quantity = input('not possible, again!: ');
+    if pool_quantity > nodes_quantity-1
+        pool_quantity = input('make no sense, try again: ');
     else
         repeat = 0;
     end
 end
 
-disp('mark the clusters');
-cluster_nodes = zeros(cluster_quantity,2);
-cluster_child_data = zeros(cluster_quantity,2);
-for j = 1:cluster_quantity
-    %first node
+% set the size of the pools and the trigger level for complete
+pools_node_quantity = zeros(pool_quantity,2);
+for i=1:pool_quantity
+    pools_node_quantity(i,1) = input(strcat('size of pool number ',num2str(i),':'));
     repeat = 1;
     while repeat == 1
-        [tmp_x,tmp_y]=ginput(1);
-        for i = 1:nodes_quantity
-            if tmp_x < nodes(i).x + MARKER_SIZE/2
-                if tmp_x > nodes(i).x - MARKER_SIZE/2
-                    if tmp_y < nodes(i).y + MARKER_SIZE/2
-                        if tmp_y > nodes(i).y - MARKER_SIZE/2
-                            set(nodes(i).child,'Color',MARKER_CLUSTER_COLOR);
-                            cluster_nodes(j,1) = i;
-                            repeat = 0;
-                            break;
+        if pools_node_quantity(i,1) > nodes_quantity-1
+            pools_node_quantity(i,1) = input('make no sense, try again: ');
+        else
+            repeat = 0;
+        end      
+    end
+    
+    pools_node_quantity(i,2) = input(strcat('trigger level of pool number ',num2str(i),':'));
+    repeat = 1;
+    while repeat == 1
+        if pools_node_quantity(i,2) > pools_node_quantity(i,1)-1
+            pools_node_quantity(i,2) = input('make no sense, try again: ');
+        else
+            repeat = 0;
+        end      
+    end
+end
+
+% connect nodes to a specific pool
+pool_nodes = zeros(pool_quantity,max(pools_node_quantity(:,1))); %has to set manuel in C
+for i=1:pool_quantity
+    disp(strcat('mark the nodes of pool number ',num2str(i)));
+    for j=1:pools_node_quantity(i,1)
+        repeat = 1;
+        while repeat == 1
+            [tmp_x,tmp_y]=ginput(1);
+            for k = 1:nodes_quantity
+                if tmp_x < nodes(k).x + MARKER_SIZE/2
+                    if tmp_x > nodes(k).x - MARKER_SIZE/2
+                        if tmp_y < nodes(k).y + MARKER_SIZE/2
+                            if tmp_y > nodes(k).y - MARKER_SIZE/2
+                                set(nodes(k).child,'Color',MARKER_CLUSTER_COLOR);
+                                pool_nodes(i,j) = k;
+                                nodes(k).pool_id = i;
+                                repeat = 0;
+                                break;
+                            end
                         end
                     end
                 end
             end
-        end
-        if repeat == 1
-            disp('mark the node again!');
-        end
-    end
-    %second node
-    repeat = 1;
-    while repeat == 1
-        [tmp_x,tmp_y]=ginput(1);
-        for i = 1:nodes_quantity
-            if tmp_x < nodes(i).x + MARKER_SIZE/2
-                if tmp_x > nodes(i).x - MARKER_SIZE/2
-                    if tmp_y < nodes(i).y + MARKER_SIZE/2
-                        if tmp_y > nodes(i).y - MARKER_SIZE/2
-                            set(nodes(i).child,'Color',MARKER_CLUSTER_COLOR);
-                            cluster_nodes(j,2) = i;
-                            repeat = 0;
-                            break;
-                        end
-                    end
-                end
-            end
-        end
-        if repeat == 1
-            disp('mark the node again!');
-        end
+            
+            if repeat == 1
+                disp('mark the node again!');
+            end 
+        end 
     end
     
-    % save the cluster depencies
-    nodes(cluster_nodes(j,1)).cluster = cluster_nodes(j,2);
-    nodes(cluster_nodes(j,2)).cluster = cluster_nodes(j,1);
-    
-    cluster_colors = rand(1,3); %random color for cluster identification
-    for i=1:2
-        rectangle('Position', [nodes(cluster_nodes(j,i)).x-MARKER_SIZE/2-5 ...
-            nodes(cluster_nodes(j,i)).y-MARKER_SIZE/2-5 ...
+    % set a colored frame arround the nodes
+    pool_colors = rand(1,3); %random color for cluster identification
+    for j=1:pools_node_quantity(i,1)
+        rectangle('Position', [nodes(pool_nodes(i,j)).x-MARKER_SIZE/2-5 ...
+            nodes(pool_nodes(i,j)).y-MARKER_SIZE/2-5 ...
             MARKER_SIZE+10 MARKER_SIZE+10], ...
-            'EdgeColor',cluster_colors(1,:), ...
+            'EdgeColor',pool_colors(1,:), ...
             'LineWidth', MARKER_LINE_WIDHT);
         tmp_child_data = get(gca,'Children');
-        cluster_child_data(j,i) = tmp_child_data(1);
-        set(nodes(cluster_nodes(j,i)).child,'Color',MARKER_NORMAL_COLOR);
+        set(nodes(pool_nodes(i,j)).child,'Color',MARKER_NORMAL_COLOR);
     end
+    
 end
 
 
@@ -380,12 +383,25 @@ while repeat == 1
                         set(nodes(i).child,'Color',MARKER_START_COLOR);
                         set(nodes(i).weighttext,'Visible','off');
                         text(nodes(i).x-5,nodes(i).y+5,num2str(node_count),'FontSize',20,'Color','w');
-                        if nodes(start_node).cluster ~= 0
-                            set(nodes(nodes(start_node).cluster).child,'Visible','off');
-                            set(nodes(nodes(start_node).cluster).weighttext,'Visible','off');
-                            nodes(nodes(start_node).cluster).child = 0; 
-                            node_count = node_count + 1; % count the completed nodes
+                        
+                        if nodes(start_node).pool_id ~= 0
+                            pools_node_quantity(nodes(start_node).pool_id,2) = pools_node_quantity(nodes(start_node).pool_id,2) - 1;
+
+                            if pools_node_quantity(nodes(start_node).pool_id,2) == 0
+                                for j=1:nodes_quantity
+                                    check = find(pool_nodes(nodes(start_node).pool_id,:) == j);
+                                    if isempty(check) || j==start_node || nodes(j).child == 0  
+                                    else
+                                        set(nodes(j).child,'Visible','off');
+                                        set(nodes(j).weighttext,'Visible','off');
+                                        nodes(j).child = 0; 
+                                        node_count = node_count + 1; % count the completed nodes
+                                    end
+                                end
+                            end
                         end
+                        
+                        
                         repeat = 0;
                         break;
                     end
@@ -487,12 +503,25 @@ for seconds = 1:PLAY_TIME
         start_node = next_node.node;
         set(nodes(next_node.node).child,'Color',MARKER_START_COLOR);
         text(nodes(next_node.node).x-5,nodes(next_node.node).y+5,num2str(node_count),'FontSize',20,'Color','w');
-        if nodes(next_node.node).cluster ~= 0
-            set(nodes(nodes(next_node.node).cluster).child,'Visible','off');
-            set(nodes(nodes(next_node.node).cluster).weighttext,'Visible','off');
-            nodes(nodes(next_node.node).cluster).child = 0; 
-            node_count = node_count + 1; % count the completed nodes
+        
+        if nodes(start_node).pool_id ~= 0
+            pools_node_quantity(nodes(start_node).pool_id,2) = pools_node_quantity(nodes(start_node).pool_id,2) - 1;
+
+            if pools_node_quantity(nodes(start_node).pool_id,2) == 0
+                for j=1:nodes_quantity
+                    check = find(pool_nodes(nodes(start_node).pool_id,:) == j);
+                    if isempty(check) || j==start_node || nodes(j).child == 0
+                    else
+                        set(nodes(j).child,'Visible','off');
+                        set(nodes(j).weighttext,'Visible','off');
+                        nodes(j).child = 0; 
+                        node_count = node_count + 1; % count the completed nodes
+                    end
+                end
+            end
         end
+        
+        
         busy_node_time = ceil(nodes(start_node).time + next_node.time); %reset the busy-timer
         
         
