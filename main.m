@@ -18,6 +18,7 @@ MARKER_SIZE = 20;
 MARKER_NORMAL_COLORSHAPE = 'ro';
 MARKER_NORMAL_COLOR = 'r';
 MARKER_START_COLOR = 'g';
+MARKER_NEXT_COLOR = 'y';
 MARKER_ODD_COLOR = 'm';
 MARKER_CLUSTER_COLOR = 'b';
 LINE_TREE_COLOR = 'g';
@@ -41,12 +42,19 @@ PLAYGROUND_HEIGHT = 2; % height in meter
 % strategy settings %
 STRATEGY_TRACK_ENEMY_GRID_SIZE_X = 10e-2; %10cm
 STRATEGY_TRACK_ENEMY_GRID_SIZE_Y = 10e-2; %10cm
-STRATEGY_TRACK_CENTER_WEIGHT = 1;
-STRATEGY_TRACK_FRAME_WEIGHT = 0.5;
+STRATEGY_TRACK_CENTER_WEIGHT = 2;
+STRATEGY_TRACK_FRAME_WEIGHT = 1;
 STRATEGY_TRACK_TRESHHOLD = 5;
 
 % node settings %
 NODE_QUANTITY = 11;
+
+% node arrive direction %
+NORTH = 0;
+EAST = 1;
+SOUTH = 2;
+WEST = 3;
+ARRIVE_NODE_FRAME = 15e-2; %15cm
 
 % ball
 NODE_BALL_ID = 1;
@@ -140,6 +148,7 @@ nodes(1).weight = 0;
 nodes(1).weighttext = text(nodes(1).x-MARKER_SIZE,nodes(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(1).pool_id = 0; %ID of the pool
 nodes(1).child = 0;
+nodes(1).arrive = WEST;
 
 % ball 2
 nodes(2).id = NODE_BALL_ID;
@@ -152,6 +161,7 @@ nodes(2).weight = 0;
 nodes(2).weighttext = text(nodes(2).x-MARKER_SIZE,nodes(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(2).pool_id = 0; %ID of the pool
 nodes(2).child = 0;
+nodes(2).arrive = WEST;
 
 % ball 3
 nodes(3).id = NODE_BALL_ID;
@@ -164,6 +174,7 @@ nodes(3).weight = 0;
 nodes(3).weighttext = text(nodes(3).x-MARKER_SIZE,nodes(3).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(3).pool_id = 0; %ID of the pool
 nodes(3).child = 0;
+nodes(3).arrive = WEST;
 
 % ball 4
 nodes(4).id = NODE_BALL_ID;
@@ -176,6 +187,7 @@ nodes(4).weight = 0;
 nodes(4).weighttext = text(nodes(4).x-MARKER_SIZE,nodes(4).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(4).pool_id = 0; %ID of the pool
 nodes(4).child = 0;
+nodes(4).arrive = WEST;
 
 % ball 5
 nodes(5).id = NODE_BALL_ID;
@@ -188,6 +200,7 @@ nodes(5).weight = 0;
 nodes(5).weighttext = text(nodes(5).x-MARKER_SIZE,nodes(5).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(5).pool_id = 0; %ID of the pool
 nodes(5).child = 0;
+nodes(5).arrive = WEST;
 
 % ball 6
 nodes(6).id = NODE_BALL_ID;
@@ -200,6 +213,7 @@ nodes(6).weight = 0;
 nodes(6).weighttext = text(nodes(6).x-MARKER_SIZE,nodes(6).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(6).pool_id = 0; %ID of the pool
 nodes(6).child = 0;
+nodes(6).arrive = WEST;
 
 % fresco 1
 nodes(7).id = NODE_FRESCO_ID;
@@ -212,6 +226,7 @@ nodes(7).weight = 0;
 nodes(7).weighttext = text(nodes(7).x-MARKER_SIZE,nodes(7).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(7).pool_id = 0; %ID of the pool
 nodes(7).child = 0;
+nodes(7).arrive = SOUTH;
 
 % fresco 2
 nodes(8).id = NODE_FRESCO_ID;
@@ -224,6 +239,7 @@ nodes(8).weight = 0;
 nodes(8).weighttext = text(nodes(8).x-MARKER_SIZE,nodes(8).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(8).pool_id = 0; %ID of the pool
 nodes(8).child = 0;
+nodes(8).arrive = SOUTH;
 
 % fire 1
 nodes(9).id = NODE_FIRE_ID;
@@ -236,6 +252,7 @@ nodes(9).weight = 0;
 nodes(9).weighttext = text(nodes(9).x-MARKER_SIZE,nodes(9).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(9).pool_id = 0; %ID of the pool
 nodes(9).child = 0;
+nodes(9).arrive = WEST;
 
 % fire 2
 nodes(10).id = NODE_FIRE_ID;
@@ -248,6 +265,7 @@ nodes(10).weight = 0;
 nodes(10).weighttext = text(nodes(10).x-MARKER_SIZE,nodes(10).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(10).pool_id = 0; %ID of the pool
 nodes(10).child = 0;
+nodes(10).arrive = SOUTH;
 
 % fire 3
 nodes(11).id = NODE_FIRE_ID;
@@ -260,6 +278,7 @@ nodes(11).weight = 0;
 nodes(11).weighttext = text(nodes(11).x-MARKER_SIZE,nodes(11).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
 nodes(11).pool_id = 0; %ID of the pool
 nodes(11).child = 0;
+nodes(11).arrive = EAST;
 
 % start
 % nodes(12).id = NODE_START_ID;
@@ -446,12 +465,104 @@ for seconds = 1:PLAY_TIME
     ww1 = (PLAY_TIME-seconds)/PLAY_TIME;
     ww2 = (PLAY_TIME-(PLAY_TIME-seconds))/PLAY_TIME;
     for i = 1:nodes_quantity
+        
         % destination node point-weight
-        if nodes(i).id == NODE_BALL_ID && nodes(i).x > nodes(start_node).x
-            w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
-        else
-            w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent)*2;
+        switch nodes(i).arrive
+            case NORTH
+                % class 4 weighting %
+                if nodes(i).y < nodes(start_node).y
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                
+                % class 3 weighting %
+                elseif nodes(i).y >= nodes(start_node).y ...
+                        && nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < nodes(start_node).y
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    
+                % class 2 weighting %
+                elseif (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= nodes(start_node).y ...
+                        && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
+                        || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    
+                % class 1 weighting %
+                else
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    
+                end
+                
+            case EAST
+                % class 4 weighting %
+                if nodes(i).x > nodes(start_node).x
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                
+                % class 3 weighting %
+                elseif nodes(i).x <= nodes(start_node).x ...
+                        && nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > nodes(start_node).x
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    
+                % class 2 weighting %
+                elseif nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x ...
+                        && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
+                        || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    
+                % class 1 weighting %
+                else
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    
+                end
+                
+            case SOUTH
+                % class 4 weighting %
+                if nodes(i).y > nodes(start_node).y
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                
+                % class 3 weighting %
+                elseif nodes(i).y <= nodes(start_node).y ...
+                        && nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > nodes(start_node).y
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    
+                % class 2 weighting %
+                elseif (nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= nodes(start_node).y ...
+                        && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
+                        || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    
+                % class 1 weighting %
+                else
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    
+                end
+                
+            case WEST
+                % class 4 weighting %
+                if nodes(i).x < nodes(start_node).x
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                
+                % class 3 weighting %
+                elseif nodes(i).x >= nodes(start_node).x ...
+                        && nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < nodes(start_node).x
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    
+                % class 2 weighting %
+                elseif nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x ...
+                        && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
+                        || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    
+                % class 1 weighting %
+                else
+                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    
+                end
         end
+        
+        
+%         if nodes(i).id == NODE_BALL_ID && nodes(i).x > nodes(start_node).x
+%             w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+%         else
+%             w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent)*2;
+%         end
         % destination node enemy-weight
         w_enemy = strategy_track_enemy_grid(...
         ceil(nodes(i).y/(PLAYGROUND_IMAGE_HEIGHT/(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y))),...
@@ -473,21 +584,28 @@ for seconds = 1:PLAY_TIME
     %
     % next-node searching
     %
-    if busy_node_time <= 0
+    % unselect the last next node
+    if exist('next_node','var') == 1 && start_node ~= next_node.node
+        set(nodes(next_node.node).child,'Color',MARKER_NORMAL_COLOR);
+    end
     
-        next_node.weight = inf;%node_edge_weight(start_node,1);
+    next_node.weight = inf;%node_edge_weight(start_node,1);
 
-        for i = 1:nodes_quantity
-            if nodes(i).child ~= 0 && i ~= start_node
-                % find the best node (lowest weight)
-                if next_node.weight > node_edge_weight(start_node,i)
-                    next_node.node = i;
-                    next_node.time = w_src_dest/ROBO_AVERAGE_SPEED;
-                    next_node.weight = node_edge_weight(start_node,i);
-                end
+    for i = 1:nodes_quantity
+        if nodes(i).child ~= 0 && i ~= start_node
+            % find the best node (lowest weight)
+            if next_node.weight > node_edge_weight(start_node,i)
+                next_node.node = i;
+                next_node.time = w_src_dest/ROBO_AVERAGE_SPEED;
+                next_node.weight = node_edge_weight(start_node,i);
             end
         end
-
+    end
+    
+    set(nodes(next_node.node).child,'Color',MARKER_NEXT_COLOR);
+    
+    % current node is done %
+    if busy_node_time <= 0
         node_count = node_count + 1; % count the completed nodes
         
         % plot informations in playground
