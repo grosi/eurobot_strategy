@@ -505,6 +505,9 @@ time = zeros(NODE_QUANTITY,PLAY_TIME);
 ww1 = 1;
 ww2 = 0;
 
+%TODO
+graph_weight = zeros(nodes_quantity,nodes_quantity);
+
 % a loop with 90 iterations (one for every second)  
 for seconds = 1:PLAY_TIME
     %
@@ -526,118 +529,278 @@ for seconds = 1:PLAY_TIME
     figure(PLAYAREA);
     ww1 = (PLAY_TIME-seconds)/PLAY_TIME;
     ww2 = (PLAY_TIME-(PLAY_TIME-seconds))/PLAY_TIME;
+%     for i = 1:nodes_quantity
+%         
+%         % destination node point-weight
+%         switch nodes(i).arrive
+%             case NORTH
+%                 % class 4 weighting %
+%                 if nodes(i).y < nodes(start_node).y
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+%                 
+%                 % class 3 weighting %
+%                 elseif nodes(i).y >= nodes(start_node).y ...
+%                         && nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < nodes(start_node).y
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+%                     
+%                 % class 2 weighting %
+%                 elseif (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= nodes(start_node).y ...
+%                         && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
+%                         || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+%                     
+%                 % class 1 weighting %
+%                 else
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+%                     
+%                 end
+%                 
+%             case EAST
+%                 % class 4 weighting %
+%                 if nodes(i).x > nodes(start_node).x
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+%                 
+%                 % class 3 weighting %
+%                 elseif nodes(i).x <= nodes(start_node).x ...
+%                         && nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > nodes(start_node).x
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+%                     
+%                 % class 2 weighting %
+%                 elseif nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x ...
+%                         && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
+%                         || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+%                     
+%                 % class 1 weighting %
+%                 else
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+%                     
+%                 end
+%                 
+%             case SOUTH
+%                 % class 4 weighting %
+%                 if nodes(i).y > nodes(start_node).y
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+%                 
+%                 % class 3 weighting %
+%                 elseif nodes(i).y <= nodes(start_node).y ...
+%                         && nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > nodes(start_node).y
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+%                     
+%                 % class 2 weighting %
+%                 elseif (nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= nodes(start_node).y ...
+%                         && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
+%                         || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+%                     
+%                 % class 1 weighting %
+%                 else
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+%                     
+%                 end
+%                 
+%             case WEST
+%                 % class 4 weighting %
+%                 if nodes(i).x < nodes(start_node).x
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+%                 
+%                 % class 3 weighting %
+%                 elseif nodes(i).x >= nodes(start_node).x ...
+%                         && nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < nodes(start_node).x
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+%                     
+%                 % class 2 weighting %
+%                 elseif nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x ...
+%                         && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
+%                         || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+%                     
+%                 % class 1 weighting %
+%                 else
+%                     w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+%                     
+%                 end
+%         end
+%         
+%         
+%         % destination node enemy-weight
+%         w_enemy = strategy_track_enemy_grid(...
+%         ceil(nodes(i).y/(PLAYGROUND_IMAGE_HEIGHT/(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y))),...
+%         ceil(nodes(i).x/(PLAYGROUND_IMAGE_WIDTH/(PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X))));
+%         nodes(i).weight = ww1 * w_dest + ww1 * w_enemy;
+% 
+%         % source -> destination node distance-time weight
+%         w_src_dest = sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
+%          +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2)/ROBO_AVERAGE_SPEED;
+% 
+%         node_edge_weight(start_node,i) = ww1 * w_dest + ww1 * w_enemy + ww2 * w_src_dest;
+%         weight_history(i,seconds) = ww1 * w_dest + ww1 * w_enemy + w_src_dest;
+%         
+%         % plot weight informations            
+%         set(nodes(i).weighttext,'String',num2str(node_edge_weight(start_node,i)));
+%     end
+       
+    %TODO
     for i = 1:nodes_quantity
         
-        % destination node point-weight
-        switch nodes(i).arrive
-            case NORTH
-                % class 4 weighting %
-                if nodes(i).y < nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
-                
-                % class 3 weighting %
-                elseif nodes(i).y >= nodes(start_node).y ...
-                        && nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
-                    
-                % class 2 weighting %
-                elseif (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= nodes(start_node).y ...
-                        && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
-                        || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
-                    
-                % class 1 weighting %
-                else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
-                    
-                end
-                
-            case EAST
-                % class 4 weighting %
-                if nodes(i).x > nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
-                
-                % class 3 weighting %
-                elseif nodes(i).x <= nodes(start_node).x ...
-                        && nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
-                    
-                % class 2 weighting %
-                elseif nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x ...
-                        && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
-                        || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
-                    
-                % class 1 weighting %
-                else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
-                    
-                end
-                
-            case SOUTH
-                % class 4 weighting %
-                if nodes(i).y > nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
-                
-                % class 3 weighting %
-                elseif nodes(i).y <= nodes(start_node).y ...
-                        && nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
-                    
-                % class 2 weighting %
-                elseif (nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= nodes(start_node).y ...
-                        && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
-                        || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
-                    
-                % class 1 weighting %
-                else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
-                    
-                end
-                
-            case WEST
-                % class 4 weighting %
-                if nodes(i).x < nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
-                
-                % class 3 weighting %
-                elseif nodes(i).x >= nodes(start_node).x ...
-                        && nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
-                    
-                % class 2 weighting %
-                elseif nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x ...
-                        && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
-                        || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
-                    
-                % class 1 weighting %
-                else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
-                    
-                end
+        
+       for j = 1: nodes_quantity
+          
+        % prevent own node compare
+        if j ~= i
+           
+            % destination node point-weight
+            switch nodes(j).arrive
+                case NORTH
+                    % class 4 weighting %
+                    if nodes(j).y < nodes(i).y
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 4;
+
+                    % class 3 weighting %
+                    elseif nodes(j).y >= nodes(i).y ...
+                            && nodes(j).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < nodes(i).y
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 3;
+
+                    % class 2 weighting %
+                    elseif (nodes(j).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= nodes(i).y ...
+                            && (nodes(j).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(i).x  ...
+                            || nodes(j).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(i).x )
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 2;
+
+                    % class 1 weighting %
+                    else
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent);
+
+                    end
+
+                case EAST
+                    % class 4 weighting %
+                    if nodes(j).x > nodes(i).x
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 4;
+
+                    % class 3 weighting %
+                    elseif nodes(j).x <= nodes(i).x ...
+                            && nodes(j).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > nodes(i).x
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 3;
+
+                    % class 2 weighting %
+                    elseif nodes(j).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(i).x ...
+                            && (nodes(j).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(i).y ...
+                            || nodes(j).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(i).y)
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 2;
+
+                    % class 1 weighting %
+                    else
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent);
+
+                    end
+
+                case SOUTH
+                    % class 4 weighting %
+                    if nodes(j).y > nodes(i).y
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 4;
+
+                    % class 3 weighting %
+                    elseif nodes(j).y <= nodes(i).y ...
+                            && nodes(j).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > nodes(i).y
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 3;
+
+                    % class 2 weighting %
+                    elseif (nodes(j).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= nodes(i).y ...
+                            && (nodes(j).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(i).x  ...
+                            || nodes(j).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(i).x )
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 2;
+
+                    % class 1 weighting %
+                    else
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent);
+
+                    end
+
+                case WEST
+                    % class 4 weighting %
+                    if nodes(j).x < nodes(i).x
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 4;
+
+                    % class 3 weighting %
+                    elseif nodes(j).x >= nodes(i).x ...
+                            && nodes(j).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < nodes(i).x
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 3;
+
+                    % class 2 weighting %
+                    elseif nodes(j).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(i).x ...
+                            && (nodes(j).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(i).y ...
+                            || nodes(j).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(i).y)
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent) * 2;
+
+                    % class 1 weighting %
+                    else
+                        w_dest = (nodes(j).points/nodes(j).time)*(1/nodes(j).percent);
+
+                    end
+            end
+            % end switch %
+
+            % destination node enemy-weight
+            w_enemy = strategy_track_enemy_grid(...
+            ceil(nodes(j).y/(PLAYGROUND_IMAGE_HEIGHT/(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y))),...
+            ceil(nodes(j).x/(PLAYGROUND_IMAGE_WIDTH/(PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X))));
+            %nodes(j).weight = ww1 * w_dest + ww1 * w_enemy;
+
+            % source -> destination node distance-time weight
+            w_src_dest = sqrt((abs((nodes(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes(j).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
+             +(abs((nodes(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes(j).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2)/ROBO_AVERAGE_SPEED;
+
+            graph_weight(i,j) = ww1 * w_dest + ww1 * w_enemy + ww2 * w_src_dest;
+
+            figure(PLAYAREA);
+            plot([nodes(i).x nodes(j).x], [nodes(i).y nodes(j).y],'b','LineWidth',3); % plot connection
         end
         
+       end
         
-        % destination node enemy-weight
-        w_enemy = strategy_track_enemy_grid(...
-        ceil(nodes(i).y/(PLAYGROUND_IMAGE_HEIGHT/(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y))),...
-        ceil(nodes(i).x/(PLAYGROUND_IMAGE_WIDTH/(PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X))));
-        nodes(i).weight = ww1 * w_dest + ww1 * w_enemy;
-
-        % source -> destination node distance-time weight
-        w_src_dest = sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
-         +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2)/ROBO_AVERAGE_SPEED;
-
-        node_edge_weight(start_node,i) = ww1 * w_dest + ww1 * w_enemy + ww2 * w_src_dest;
-        weight_history(i,seconds) = ww1 * w_dest + ww1 * w_enemy + w_src_dest;
-        
-        % plot weight informations            
-        set(nodes(i).weighttext,'String',num2str(node_edge_weight(start_node,i)));
     end
-       
+
     
+    % tree %
+    
+    prim_alg(nodes_quantity, graph_weight, ...
+    nodes, LINE_TREE_COLOR, LINE_LINE_WIDTH)
+    
+    min_index = 0;
+    complete_nodes = zeros(1,nodes_quantity);
+    complete_nodes(1,1) = 1;
+    
+    for h = 2:nodes_quantity
+    
+        min_weight_sum = inf;
+        for i = 2:nodes_quantity
+            
+            % check if node is not done
+            done = 1;
+            for j = 1:nodes_quantity
+               if complete_nodes(1,j) == i
+                  done = 0; 
+                  break;          
+               end
+            end
+            
+            
+             if done == 1
+                if (graph_weight(complete_nodes(1,h-1), i) + graph_weight(i,complete_nodes(1,h-1))) < min_weight_sum
+                   min_weight_sum = (graph_weight(complete_nodes(1,h-1), i) + graph_weight(i,complete_nodes(1,h-1))); 
+                   min_index = i;
+                end
+             end
+        end
+        complete_nodes(1,h) = min_index;
+        
+        figure(PLAYAREA);
+        plot([nodes(complete_nodes(1,h-1)).x nodes(complete_nodes(1,h)).x], [nodes(complete_nodes(1,h-1)).y nodes(complete_nodes(1,h)).y],'g','LineWidth',3); % plot connection
+    
+    end
+
+
     %
     % next-node searching
     %
@@ -646,8 +809,15 @@ for seconds = 1:PLAY_TIME
         set(nodes(next_node.node).child,'Color',MARKER_NORMAL_COLOR);
     end
     
+   
+    
+    
+    
+    %
+    % next node old
+    %
     next_node.weight = inf;%node_edge_weight(start_node,1);
-
+    
     for i = 1:nodes_quantity
         if nodes(i).child ~= 0 && i ~= start_node
             % find the best node (lowest weight)

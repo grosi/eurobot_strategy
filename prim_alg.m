@@ -24,9 +24,9 @@ while (e<l)
         if listV(i)==1
             for j=1:l
                 if listV(j)==0
-                   if min>a(i,j)
-                        min=a(i,j);
-                        b=a(i,j);
+                   if min>(a(i,j) + a(i,j))
+                        min=(a(i,j) + a(i,j));
+                        b=(a(i,j) + a(i,j));
                         s=i;
                         d=j;
                     end
