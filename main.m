@@ -16,6 +16,7 @@ MARKER_LINE_WIDHT = 2;
 LINE_LINE_WIDTH = 3;
 MARKER_SIZE = 20;
 MARKER_NORMAL_COLORSHAPE = 'ro';
+MARKER_NORMAL_SUB_COLORSHAPE = 'mo';
 MARKER_START_COLORSHAPE = 'yo';
 MARKER_NORMAL_COLOR = 'r';
 MARKER_START_COLOR = 'g';
@@ -50,7 +51,10 @@ STRATEGY_TRACK_FRAME_WEIGHT = 2;
 STRATEGY_TRACK_TRESHHOLD = 5;
 
 % node settings %
-NODE_QUANTITY = 11;
+NODE_QUANTITY_MAIN = 9;
+NODE_QUANTITY_SUB = 2;
+NODE_GRAPH_NO_SUB_ID = 0;
+NODE_GRAPH_SUB_ID = 1;
 
 % node arrive direction %
 NORTH = 0;
@@ -103,7 +107,7 @@ NODE_FIRE_POOL_2_Y_POSITION = 1.1; % [m]
 NODE_HEART_FIRE_ID = 5;
 NODE_HEART_FIRE_TIME = 15;
 NODE_HEART_FIRE_POINT = 4;
-NODE_HEART_FIRE_PERCENT_OF_POINTS = 2*NODE_FIRE_POOL_POINT/TOTAL_POINTS/2;
+NODE_HEART_FIRE_PERCENT_OF_POINTS = 2*NODE_HEART_FIRE_POINT/TOTAL_POINTS/2;
 NODE_HEART_FIRE_1_X_POSITION = 0.1; % [m]
 NODE_HEART_FIRE_1_Y_POSITION = 1.9; % [m]
 NODE_HEART_FIRE_2_X_POSITION = 1.5; % [m]
@@ -134,7 +138,7 @@ NODE_FIRE_6_Y_POSITION = 1.6; % [m]
 NODE_NET_ID = 6;
 NODE_NET_TIME = 1; %[s]
 NODE_NET_POINT = 6;
-NODE_NET_PERCENT_OF_POINTS = 1*NODE_FIRE_POINT/TOTAL_POINTS/1;
+NODE_NET_PERCENT_OF_POINTS = 1*NODE_NET_POINT/TOTAL_POINTS/1;
 NODE_NET_1_X_POSITION = 0.4; % [m]
 NODE_NET_1_Y_POSITION = 0.60; % [m]
 NODE_NET_2_X_POSITION = 0.7; % [m]
@@ -179,7 +183,8 @@ hold on;
 
 
 %% 2. set node quantity 
-nodes_quantity = NODE_QUANTITY;
+nodes_quantity_main = NODE_QUANTITY_MAIN;
+nodes_quantity_sub = NODE_QUANTITY_SUB;
 
 
 %% 3. set the nodes
@@ -187,294 +192,316 @@ nodes_quantity = NODE_QUANTITY;
 if TEAMCOLOR == 1
     
     % fire 1 %
-    nodes(1).id = NODE_FIRE_ID;
-    nodes(1).points = NODE_FIRE_POINT;
-    nodes(1).percent = NODE_FIRE_PERCENT_OF_POINTS;
-    nodes(1).time = NODE_FIRE_TIME;
-    nodes(1).x = (NODE_FIRE_4_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(1).y = (NODE_FIRE_4_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(1).weight = 0;
-    nodes(1).weighttext = text(nodes(1).x-MARKER_SIZE,nodes(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(1).pool_id = 0; %ID of the pool
-    nodes(1).child = 0;
-    nodes(1).arrive = WEST;
+    nodes_main(1).id = NODE_FIRE_ID;
+    nodes_main(1).points = NODE_FIRE_POINT;
+    nodes_main(1).percent = NODE_FIRE_PERCENT_OF_POINTS;
+    nodes_main(1).time = NODE_FIRE_TIME;
+    nodes_main(1).x = (NODE_FIRE_4_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(1).y = (NODE_FIRE_4_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(1).weight = 0;
+    nodes_main(1).weighttext = text(nodes_main(1).x-MARKER_SIZE,nodes_main(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(1).pool_id = 0; %ID of the pool
+    nodes_main(1).child = 0;
+    nodes_main(1).arrive = WEST;
+    nodes_main(1).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire 2 %
-    nodes(2).id = NODE_FIRE_ID;
-    nodes(2).points = NODE_FIRE_POINT;
-    nodes(2).percent = NODE_FIRE_PERCENT_OF_POINTS;
-    nodes(2).time = NODE_FIRE_TIME;
-    nodes(2).x = (NODE_FIRE_5_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(2).y = (NODE_FIRE_5_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(2).weight = 0;
-    nodes(2).weighttext = text(nodes(2).x-MARKER_SIZE,nodes(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(2).pool_id = 0; %ID of the pool
-    nodes(2).child = 0;
-    nodes(2).arrive = NORTH;
+    nodes_main(2).id = NODE_FIRE_ID;
+    nodes_main(2).points = NODE_FIRE_POINT;
+    nodes_main(2).percent = NODE_FIRE_PERCENT_OF_POINTS;
+    nodes_main(2).time = NODE_FIRE_TIME;
+    nodes_main(2).x = (NODE_FIRE_5_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(2).y = (NODE_FIRE_5_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(2).weight = 0;
+    nodes_main(2).weighttext = text(nodes_main(2).x-MARKER_SIZE,nodes_main(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(2).pool_id = 0; %ID of the pool
+    nodes_main(2).child = 0;
+    nodes_main(2).arrive = NORTH;
+    nodes_main(2).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire 3 %
-    nodes(3).id = NODE_FIRE_ID;
-    nodes(3).points = NODE_FIRE_POINT;
-    nodes(3).percent = NODE_FIRE_PERCENT_OF_POINTS;
-    nodes(3).time = NODE_FIRE_TIME;
-    nodes(3).x = (NODE_FIRE_6_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(3).y = (NODE_FIRE_6_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(3).weight = 0;
-    nodes(3).weighttext = text(nodes(3).x-MARKER_SIZE,nodes(3).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(3).pool_id = 0; %ID of the pool
-    nodes(3).child = 0;
-    nodes(3).arrive = EAST;
+    nodes_main(3).id = NODE_FIRE_ID;
+    nodes_main(3).points = NODE_FIRE_POINT;
+    nodes_main(3).percent = NODE_FIRE_PERCENT_OF_POINTS;
+    nodes_main(3).time = NODE_FIRE_TIME;
+    nodes_main(3).x = (NODE_FIRE_6_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(3).y = (NODE_FIRE_6_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(3).weight = 0;
+    nodes_main(3).weighttext = text(nodes_main(3).x-MARKER_SIZE,nodes_main(3).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(3).pool_id = 0; %ID of the pool
+    nodes_main(3).child = 0;
+    nodes_main(3).arrive = EAST;
+    nodes_main(3).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire wall 1 %
-    nodes(4).id = NODE_FIRE_WALL_ID;
-    nodes(4).points = NODE_FIRE_WALL_POINT;
-    nodes(4).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
-    nodes(4).time = NODE_FIRE_WALL_EASY_TIME;
-    nodes(4).x = (NODE_FIRE_WALL_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(4).y = (NODE_FIRE_WALL_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(4).weight = 0;
-    nodes(4).weighttext = text(nodes(4).x-MARKER_SIZE,nodes(4).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(4).pool_id = 0; %ID of the pool
-    nodes(4).child = 0;
-    nodes(4).arrive = EAST;
+    nodes_main(4).id = NODE_FIRE_WALL_ID;
+    nodes_main(4).points = NODE_FIRE_WALL_POINT;
+    nodes_main(4).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
+    nodes_main(4).time = NODE_FIRE_WALL_EASY_TIME;
+    nodes_main(4).x = (NODE_FIRE_WALL_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(4).y = (NODE_FIRE_WALL_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(4).weight = 0;
+    nodes_main(4).weighttext = text(nodes_main(4).x-MARKER_SIZE,nodes_main(4).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(4).pool_id = 0; %ID of the pool
+    nodes_main(4).child = 0;
+    nodes_main(4).arrive = EAST;
+    nodes_main(4).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire wall 2 %
-    nodes(5).id = NODE_FIRE_WALL_ID;
-    nodes(5).points = NODE_FIRE_WALL_POINT;
-    nodes(5).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
-    nodes(5).time = NODE_FIRE_WALL_HEAVY_TIME;
-    nodes(5).x = (NODE_FIRE_WALL_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(5).y = (NODE_FIRE_WALL_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(5).weight = 0;
-    nodes(5).weighttext = text(nodes(5).x-MARKER_SIZE,nodes(5).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(5).pool_id = 0; %ID of the pool
-    nodes(5).child = 0;
-    nodes(5).arrive = NORTH;
+    nodes_main(5).id = NODE_FIRE_WALL_ID;
+    nodes_main(5).points = NODE_FIRE_WALL_POINT;
+    nodes_main(5).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
+    nodes_main(5).time = NODE_FIRE_WALL_HEAVY_TIME;
+    nodes_main(5).x = (NODE_FIRE_WALL_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(5).y = (NODE_FIRE_WALL_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(5).weight = 0;
+    nodes_main(5).weighttext = text(nodes_main(5).x-MARKER_SIZE,nodes_main(5).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(5).pool_id = 0; %ID of the pool
+    nodes_main(5).child = 0;
+    nodes_main(5).arrive = NORTH;
+    nodes_main(5).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire pool %
-    nodes(6).id = NODE_FIRE_POOL_ID;
-    nodes(6).points = NODE_FIRE_POOL_POINT;
-    nodes(6).percent = NODE_FIRE_POOL_PERCENT_OF_POINTS;
-    nodes(6).time = NODE_FIRE_POOL_TIME;
-    nodes(6).x = (NODE_FIRE_POOL_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(6).y = (NODE_FIRE_POOL_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(6).weight = 0;
-    nodes(6).weighttext = text(nodes(6).x-MARKER_SIZE,nodes(6).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(6).pool_id = 0; %ID of the pool
-    nodes(6).child = 0;
-    nodes(6).arrive = WEST;
+    nodes_main(6).id = NODE_FIRE_POOL_ID;
+    nodes_main(6).points = NODE_FIRE_POOL_POINT;
+    nodes_main(6).percent = NODE_FIRE_POOL_PERCENT_OF_POINTS;
+    nodes_main(6).time = NODE_FIRE_POOL_TIME;
+    nodes_main(6).x = (NODE_FIRE_POOL_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(6).y = (NODE_FIRE_POOL_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(6).weight = 0;
+    nodes_main(6).weighttext = text(nodes_main(6).x-MARKER_SIZE,nodes_main(6).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(6).pool_id = 0; %ID of the pool
+    nodes_main(6).child = 0;
+    nodes_main(6).arrive = WEST;
+    nodes_main(6).sub = NODE_GRAPH_SUB_ID;
     
     % heart fire 1 %
-    nodes(7).id = NODE_HEART_FIRE_ID;
-    nodes(7).points = NODE_HEART_FIRE_POINT;
-    nodes(7).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
-    nodes(7).time = NODE_HEART_FIRE_TIME;
-    nodes(7).x = (NODE_HEART_FIRE_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(7).y = (NODE_HEART_FIRE_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(7).weight = 0;
-    nodes(7).weighttext = text(nodes(7).x-MARKER_SIZE,nodes(7).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(7).pool_id = 0; %ID of the pool
-    nodes(7).child = 0;
-    nodes(7).arrive = EAST;
+    nodes_sub(1).id = NODE_HEART_FIRE_ID;
+    nodes_sub(1).points = NODE_HEART_FIRE_POINT;
+    nodes_sub(1).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
+    nodes_sub(1).time = NODE_HEART_FIRE_TIME;
+    nodes_sub(1).x = (NODE_HEART_FIRE_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(1).y = (NODE_HEART_FIRE_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(1).weight = 0;
+    nodes_sub(1).weighttext = text(nodes_sub(1).x-MARKER_SIZE,nodes_sub(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_sub(1).pool_id = 0; %ID of the pool
+    nodes_sub(1).child = 0;
+    nodes_sub(1).arrive = EAST;
+    nodes_sub(1).sub = NODE_GRAPH_NO_SUB_ID;
     
     % heart fire 2 %
-    nodes(8).id = NODE_HEART_FIRE_ID;
-    nodes(8).points = NODE_HEART_FIRE_POINT;
-    nodes(8).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
-    nodes(8).time = NODE_HEART_FIRE_TIME;
-    nodes(8).x = (NODE_HEART_FIRE_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(8).y = (NODE_HEART_FIRE_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(8).weight = 0;
-    nodes(8).weighttext = text(nodes(8).x-MARKER_SIZE,nodes(8).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(8).pool_id = 0; %ID of the pool
-    nodes(8).child = 0;
-    nodes(8).arrive = WEST;
+    nodes_sub(2).id = NODE_HEART_FIRE_ID;
+    nodes_sub(2).points = NODE_HEART_FIRE_POINT;
+    nodes_sub(2).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
+    nodes_sub(2).time = NODE_HEART_FIRE_TIME;
+    nodes_sub(2).x = (NODE_HEART_FIRE_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(2).y = (NODE_HEART_FIRE_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(2).weight = 0;
+    nodes_sub(2).weighttext = text(nodes_sub(2).x-MARKER_SIZE,nodes_sub(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_sub(2).pool_id = 0; %ID of the pool
+    nodes_sub(2).child = 0;
+    nodes_sub(2).arrive = WEST;
+    nodes_sub(2).sub = NODE_GRAPH_NO_SUB_ID;
     
     % net 1 %
-    nodes(9).id = NODE_NET_ID;
-    nodes(9).points = NODE_NET_POINT;
-    nodes(9).percent = NODE_NET_PERCENT_OF_POINTS;
-    nodes(9).time = NODE_NET_TIME;
-    nodes(9).x = (NODE_NET_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(9).y = (NODE_NET_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(9).weight = 0;
-    nodes(9).weighttext = text(nodes(9).x-MARKER_SIZE,nodes(9).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(9).pool_id = 0; %ID of the pool
-    nodes(9).child = 0;
-    nodes(9).arrive = SOUTH;
+    nodes_main(7).id = NODE_NET_ID;
+    nodes_main(7).points = NODE_NET_POINT;
+    nodes_main(7).percent = NODE_NET_PERCENT_OF_POINTS;
+    nodes_main(7).time = NODE_NET_TIME;
+    nodes_main(7).x = (NODE_NET_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(7).y = (NODE_NET_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(7).weight = 0;
+    nodes_main(7).weighttext = text(nodes_main(7).x-MARKER_SIZE,nodes_main(7).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(7).pool_id = 0; %ID of the pool
+    nodes_main(7).child = 0;
+    nodes_main(7).arrive = SOUTH;
+    nodes_main(7).sub = NODE_GRAPH_NO_SUB_ID;
     
     % net 2 %
-    nodes(10).id = NODE_NET_ID;
-    nodes(10).points = NODE_NET_POINT;
-    nodes(10).percent = NODE_NET_PERCENT_OF_POINTS;
-    nodes(10).time = NODE_NET_TIME;
-    nodes(10).x = (NODE_NET_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(10).y = (NODE_NET_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(10).weight = 0;
-    nodes(10).weighttext = text(nodes(10).x-MARKER_SIZE,nodes(10).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(10).pool_id = 0; %ID of the pool
-    nodes(10).child = 0;
-    nodes(10).arrive = SOUTH;
+    nodes_main(8).id = NODE_NET_ID;
+    nodes_main(8).points = NODE_NET_POINT;
+    nodes_main(8).percent = NODE_NET_PERCENT_OF_POINTS;
+    nodes_main(8).time = NODE_NET_TIME;
+    nodes_main(8).x = (NODE_NET_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(8).y = (NODE_NET_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(8).weight = 0;
+    nodes_main(8).weighttext = text(nodes_main(8).x-MARKER_SIZE,nodes_main(8).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(8).pool_id = 0; %ID of the pool
+    nodes_main(8).child = 0;
+    nodes_main(8).arrive = SOUTH;
+    nodes_main(8).sub = NODE_GRAPH_NO_SUB_ID;
     
     % net 3 %
-    nodes(11).id = NODE_NET_ID;
-    nodes(11).points = NODE_NET_POINT;
-    nodes(11).percent = NODE_NET_PERCENT_OF_POINTS;
-    nodes(11).time = NODE_NET_TIME;
-    nodes(11).x = (NODE_NET_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(11).y = (NODE_NET_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(11).weight = 0;
-    nodes(11).weighttext = text(nodes(11).x-MARKER_SIZE,nodes(11).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(11).pool_id = 0; %ID of the pool
-    nodes(11).child = 0;
-    nodes(11).arrive = SOUTH;
+    nodes_main(9).id = NODE_NET_ID;
+    nodes_main(9).points = NODE_NET_POINT;
+    nodes_main(9).percent = NODE_NET_PERCENT_OF_POINTS;
+    nodes_main(9).time = NODE_NET_TIME;
+    nodes_main(9).x = (NODE_NET_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(9).y = (NODE_NET_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(9).weight = 0;
+    nodes_main(9).weighttext = text(nodes_main(9).x-MARKER_SIZE,nodes_main(9).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(9).pool_id = 0; %ID of the pool
+    nodes_main(9).child = 0;
+    nodes_main(9).arrive = SOUTH;
+    nodes_main(9).sub = NODE_GRAPH_NO_SUB_ID;
 
     
 % yellow %
 else
     
     % fire 1 %
-    nodes(1).id = NODE_FIRE_ID;
-    nodes(1).points = NODE_FIRE_POINT;
-    nodes(1).percent = NODE_FIRE_PERCENT_OF_POINTS;
-    nodes(1).time = NODE_FIRE_TIME;
-    nodes(1).x = (NODE_FIRE_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(1).y = (NODE_FIRE_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(1).weight = 0;
-    nodes(1).weighttext = text(nodes(1).x-MARKER_SIZE,nodes(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(1).pool_id = 0; %ID of the pool
-    nodes(1).child = 0;
-    nodes(1).arrive = EAST;
+    nodes_main(1).id = NODE_FIRE_ID;
+    nodes_main(1).points = NODE_FIRE_POINT;
+    nodes_main(1).percent = NODE_FIRE_PERCENT_OF_POINTS;
+    nodes_main(1).time = NODE_FIRE_TIME;
+    nodes_main(1).x = (NODE_FIRE_1_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(1).y = (NODE_FIRE_1_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(1).weight = 0;
+    nodes_main(1).weighttext = text(nodes_main(1).x-MARKER_SIZE,nodes_main(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(1).pool_id = 0; %ID of the pool
+    nodes_main(1).child = 0;
+    nodes_main(1).arrive = EAST;
+    nodes_main(1).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire 2 %
-    nodes(2).id = NODE_FIRE_ID;
-    nodes(2).points = NODE_FIRE_POINT;
-    nodes(2).percent = NODE_FIRE_PERCENT_OF_POINTS;
-    nodes(2).time = NODE_FIRE_TIME;
-    nodes(2).x = (NODE_FIRE_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(2).y = (NODE_FIRE_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(2).weight = 0;
-    nodes(2).weighttext = text(nodes(2).x-MARKER_SIZE,nodes(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(2).pool_id = 0; %ID of the pool
-    nodes(2).child = 0;
-    nodes(2).arrive = NORTH;
+    nodes_main(2).id = NODE_FIRE_ID;
+    nodes_main(2).points = NODE_FIRE_POINT;
+    nodes_main(2).percent = NODE_FIRE_PERCENT_OF_POINTS;
+    nodes_main(2).time = NODE_FIRE_TIME;
+    nodes_main(2).x = (NODE_FIRE_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(2).y = (NODE_FIRE_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(2).weight = 0;
+    nodes_main(2).weighttext = text(nodes_main(2).x-MARKER_SIZE,nodes_main(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(2).pool_id = 0; %ID of the pool
+    nodes_main(2).child = 0;
+    nodes_main(2).arrive = NORTH;
+    nodes_main(2).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire 3 %
-    nodes(3).id = NODE_FIRE_ID;
-    nodes(3).points = NODE_FIRE_POINT;
-    nodes(3).percent = NODE_FIRE_PERCENT_OF_POINTS;
-    nodes(3).time = NODE_FIRE_TIME;
-    nodes(3).x = (NODE_FIRE_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(3).y = (NODE_FIRE_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(3).weight = 0;
-    nodes(3).weighttext = text(nodes(3).x-MARKER_SIZE,nodes(3).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(3).pool_id = 0; %ID of the pool
-    nodes(3).child = 0;
-    nodes(3).arrive = WEST;
+    nodes_main(3).id = NODE_FIRE_ID;
+    nodes_main(3).points = NODE_FIRE_POINT;
+    nodes_main(3).percent = NODE_FIRE_PERCENT_OF_POINTS;
+    nodes_main(3).time = NODE_FIRE_TIME;
+    nodes_main(3).x = (NODE_FIRE_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(3).y = (NODE_FIRE_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(3).weight = 0;
+    nodes_main(3).weighttext = text(nodes_main(3).x-MARKER_SIZE,nodes_main(3).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(3).pool_id = 0; %ID of the pool
+    nodes_main(3).child = 0;
+    nodes_main(3).arrive = WEST;
+    nodes_main(3).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire wall 1 %
-    nodes(4).id = NODE_FIRE_WALL_ID;
-    nodes(4).points = NODE_FIRE_WALL_POINT;
-    nodes(4).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
-    nodes(4).time = NODE_FIRE_WALL_EASY_TIME;
-    nodes(4).x = (NODE_FIRE_WALL_4_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(4).y = (NODE_FIRE_WALL_4_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(4).weight = 0;
-    nodes(4).weighttext = text(nodes(4).x-MARKER_SIZE,nodes(4).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(4).pool_id = 0; %ID of the pool
-    nodes(4).child = 0;
-    nodes(4).arrive = WEST;
+    nodes_main(4).id = NODE_FIRE_WALL_ID;
+    nodes_main(4).points = NODE_FIRE_WALL_POINT;
+    nodes_main(4).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
+    nodes_main(4).time = NODE_FIRE_WALL_EASY_TIME;
+    nodes_main(4).x = (NODE_FIRE_WALL_4_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(4).y = (NODE_FIRE_WALL_4_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(4).weight = 0;
+    nodes_main(4).weighttext = text(nodes_main(4).x-MARKER_SIZE,nodes_main(4).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(4).pool_id = 0; %ID of the pool
+    nodes_main(4).child = 0;
+    nodes_main(4).arrive = WEST;
+    nodes_main(4).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire wall 2 %
-    nodes(5).id = NODE_FIRE_WALL_ID;
-    nodes(5).points = NODE_FIRE_WALL_POINT;
-    nodes(5).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
-    nodes(5).time = NODE_FIRE_WALL_HEAVY_TIME;
-    nodes(5).x = (NODE_FIRE_WALL_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(5).y = (NODE_FIRE_WALL_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(5).weight = 0;
-    nodes(5).weighttext = text(nodes(5).x-MARKER_SIZE,nodes(5).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(5).pool_id = 0; %ID of the pool
-    nodes(5).child = 0;
-    nodes(5).arrive = NORTH;
+    nodes_main(5).id = NODE_FIRE_WALL_ID;
+    nodes_main(5).points = NODE_FIRE_WALL_POINT;
+    nodes_main(5).percent = NODE_FIRE_WALL_PERCENT_OF_POINTS;
+    nodes_main(5).time = NODE_FIRE_WALL_HEAVY_TIME;
+    nodes_main(5).x = (NODE_FIRE_WALL_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(5).y = (NODE_FIRE_WALL_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(5).weight = 0;
+    nodes_main(5).weighttext = text(nodes_main(5).x-MARKER_SIZE,nodes_main(5).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(5).pool_id = 0; %ID of the pool
+    nodes_main(5).child = 0;
+    nodes_main(5).arrive = NORTH;
+    nodes_main(5).sub = NODE_GRAPH_NO_SUB_ID;
     
     % fire pool %
-    nodes(6).id = NODE_FIRE_POOL_ID;
-    nodes(6).points = NODE_FIRE_POOL_POINT;
-    nodes(6).percent = NODE_FIRE_POOL_PERCENT_OF_POINTS;
-    nodes(6).time = NODE_FIRE_POOL_TIME;
-    nodes(6).x = (NODE_FIRE_POOL_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(6).y = (NODE_FIRE_POOL_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(6).weight = 0;
-    nodes(6).weighttext = text(nodes(6).x-MARKER_SIZE,nodes(6).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(6).pool_id = 0; %ID of the pool
-    nodes(6).child = 0;
-    nodes(6).arrive = WEST;
+    nodes_main(6).id = NODE_FIRE_POOL_ID;
+    nodes_main(6).points = NODE_FIRE_POOL_POINT;
+    nodes_main(6).percent = NODE_FIRE_POOL_PERCENT_OF_POINTS;
+    nodes_main(6).time = NODE_FIRE_POOL_TIME;
+    nodes_main(6).x = (NODE_FIRE_POOL_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(6).y = (NODE_FIRE_POOL_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(6).weight = 0;
+    nodes_main(6).weighttext = text(nodes_main(6).x-MARKER_SIZE,nodes_main(6).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(6).pool_id = 0; %ID of the pool
+    nodes_main(6).child = 0;
+    nodes_main(6).arrive = WEST;
+    nodes_main(6).sub = NODE_GRAPH_SUB_ID;
     
     % heart fire 1 %
-    nodes(7).id = NODE_HEART_FIRE_ID;
-    nodes(7).points = NODE_HEART_FIRE_POINT;
-    nodes(7).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
-    nodes(7).time = NODE_HEART_FIRE_TIME;
-    nodes(7).x = (NODE_HEART_FIRE_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(7).y = (NODE_HEART_FIRE_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(7).weight = 0;
-    nodes(7).weighttext = text(nodes(7).x-MARKER_SIZE,nodes(7).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(7).pool_id = 0; %ID of the pool
-    nodes(7).child = 0;
-    nodes(7).arrive = EAST;
+    nodes_sub(1).id = NODE_HEART_FIRE_ID;
+    nodes_sub(1).points = NODE_HEART_FIRE_POINT;
+    nodes_sub(1).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
+    nodes_sub(1).time = NODE_HEART_FIRE_TIME;
+    nodes_sub(1).x = (NODE_HEART_FIRE_3_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(1).y = (NODE_HEART_FIRE_3_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(1).weight = 0;
+    nodes_sub(1).weighttext = text(nodes_sub(1).x-MARKER_SIZE,nodes_sub(1).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_sub(1).pool_id = 0; %ID of the pool
+    nodes_sub(1).child = 0;
+    nodes_sub(1).arrive = WEST;
+    nodes_sub(1).sub = NODE_GRAPH_NO_SUB_ID;
     
     % heart fire 2 %
-    nodes(8).id = NODE_HEART_FIRE_ID;
-    nodes(8).points = NODE_HEART_FIRE_POINT;
-    nodes(8).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
-    nodes(8).time = NODE_HEART_FIRE_TIME;
-    nodes(8).x = (NODE_HEART_FIRE_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(8).y = (NODE_HEART_FIRE_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(8).weight = 0;
-    nodes(8).weighttext = text(nodes(8).x-MARKER_SIZE,nodes(8).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(8).pool_id = 0; %ID of the pool
-    nodes(8).child = 0;
-    nodes(8).arrive = WEST;
+    nodes_sub(2).id = NODE_HEART_FIRE_ID;
+    nodes_sub(2).points = NODE_HEART_FIRE_POINT;
+    nodes_sub(2).percent = NODE_HEART_FIRE_PERCENT_OF_POINTS;
+    nodes_sub(2).time = NODE_HEART_FIRE_TIME;
+    nodes_sub(2).x = (NODE_HEART_FIRE_2_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(2).y = (NODE_HEART_FIRE_2_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_sub(2).weight = 0;
+    nodes_sub(2).weighttext = text(nodes_sub(2).x-MARKER_SIZE,nodes_sub(2).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_sub(2).pool_id = 0; %ID of the pool
+    nodes_sub(2).child = 0;
+    nodes_sub(2).arrive = EAST;
+    nodes_sub(2).sub = NODE_GRAPH_NO_SUB_ID;
     
     % net 1 %
-    nodes(9).id = NODE_NET_ID;
-    nodes(9).points = NODE_NET_POINT;
-    nodes(9).percent = NODE_NET_PERCENT_OF_POINTS;
-    nodes(9).time = NODE_NET_TIME;
-    nodes(9).x = (NODE_NET_4_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(9).y = (NODE_NET_4_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(9).weight = 0;
-    nodes(9).weighttext = text(nodes(9).x-MARKER_SIZE,nodes(9).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(9).pool_id = 0; %ID of the pool
-    nodes(9).child = 0;
-    nodes(9).arrive = SOUTH;
+    nodes_main(7).id = NODE_NET_ID;
+    nodes_main(7).points = NODE_NET_POINT;
+    nodes_main(7).percent = NODE_NET_PERCENT_OF_POINTS;
+    nodes_main(7).time = NODE_NET_TIME;
+    nodes_main(7).x = (NODE_NET_4_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(7).y = (NODE_NET_4_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(7).weight = 0;
+    nodes_main(7).weighttext = text(nodes_main(7).x-MARKER_SIZE,nodes_main(7).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(7).pool_id = 0; %ID of the pool
+    nodes_main(7).child = 0;
+    nodes_main(7).arrive = SOUTH;
+    nodes_main(7).sub = NODE_GRAPH_NO_SUB_ID;
     
     % net 2 %
-    nodes(10).id = NODE_NET_ID;
-    nodes(10).points = NODE_NET_POINT;
-    nodes(10).percent = NODE_NET_PERCENT_OF_POINTS;
-    nodes(10).time = NODE_NET_TIME;
-    nodes(10).x = (NODE_NET_5_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(10).y = (NODE_NET_5_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(10).weight = 0;
-    nodes(10).weighttext = text(nodes(10).x-MARKER_SIZE,nodes(10).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(10).pool_id = 0; %ID of the pool
-    nodes(10).child = 0;
-    nodes(10).arrive = SOUTH;
+    nodes_main(8).id = NODE_NET_ID;
+    nodes_main(8).points = NODE_NET_POINT;
+    nodes_main(8).percent = NODE_NET_PERCENT_OF_POINTS;
+    nodes_main(8).time = NODE_NET_TIME;
+    nodes_main(8).x = (NODE_NET_5_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(8).y = (NODE_NET_5_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(8).weight = 0;
+    nodes_main(8).weighttext = text(nodes_main(8).x-MARKER_SIZE,nodes_main(8).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(8).pool_id = 0; %ID of the pool
+    nodes_main(8).child = 0;
+    nodes_main(8).arrive = SOUTH;
+    nodes_main(8).sub = NODE_GRAPH_NO_SUB_ID;
     
     % net 3 %
-    nodes(11).id = NODE_NET_ID;
-    nodes(11).points = NODE_NET_POINT;
-    nodes(11).percent = NODE_NET_PERCENT_OF_POINTS;
-    nodes(11).time = NODE_NET_TIME;
-    nodes(11).x = (NODE_NET_6_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(11).y = (NODE_NET_6_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
-    nodes(11).weight = 0;
-    nodes(11).weighttext = text(nodes(11).x-MARKER_SIZE,nodes(11).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
-    nodes(11).pool_id = 0; %ID of the pool
-    nodes(11).child = 0;
-    nodes(11).arrive = SOUTH;
+    nodes_main(9).id = NODE_NET_ID;
+    nodes_main(9).points = NODE_NET_POINT;
+    nodes_main(9).percent = NODE_NET_PERCENT_OF_POINTS;
+    nodes_main(9).time = NODE_NET_TIME;
+    nodes_main(9).x = (NODE_NET_6_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(9).y = (NODE_NET_6_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH;
+    nodes_main(9).weight = 0;
+    nodes_main(9).weighttext = text(nodes_main(9).x-MARKER_SIZE,nodes_main(9).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
+    nodes_main(9).pool_id = 0; %ID of the pool
+    nodes_main(9).child = 0;
+    nodes_main(9).arrive = SOUTH;
+    nodes_main(9).sub = NODE_GRAPH_NO_SUB_ID;
     
 end
 
@@ -492,13 +519,22 @@ end
 % plot start point %
 plot((NODE_START_X_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH,(NODE_START_Y_POSITION*PLAYGROUND_IMAGE_WIDTH)/PLAYGROUND_WIDTH,...
     MARKER_START_COLORSHAPE,'MarkerSize',MARKER_SIZE,'LineWidth',MARKER_LINE_WIDHT);
-% plot the nodes
-for i = 1:nodes_quantity
+% plot the main-nodes
+for i = 1:nodes_quantity_main
     
-    plot(nodes(i).x,nodes(i).y,MARKER_NORMAL_COLORSHAPE,...
+    plot(nodes_main(i).x,nodes_main(i).y,MARKER_NORMAL_COLORSHAPE,...
         'MarkerSize',MARKER_SIZE,'LineWidth',MARKER_LINE_WIDHT);
     tmp_child_data = get(gca,'Children');
-    nodes(i).child = tmp_child_data(1); %set( dataH(1), 'visible', 'off' )
+    nodes_main(i).child = tmp_child_data(1);
+end
+
+% plot the sub-nodes
+for i = 1:nodes_quantity_sub
+    
+    plot(nodes_sub(i).x,nodes_sub(i).y,MARKER_NORMAL_SUB_COLORSHAPE,...
+        'MarkerSize',MARKER_SIZE,'LineWidth',MARKER_LINE_WIDHT);
+    tmp_child_data = get(gca,'Children');
+    nodes_sub(i).child = tmp_child_data(1); 
 end
 
 
@@ -507,7 +543,7 @@ end
 repeat = 1;
 pool_quantity = input('how many node-pools: ');
 while repeat == 1
-    if pool_quantity > nodes_quantity-1
+    if pool_quantity > nodes_quantity_main-1
         pool_quantity = input('make no sense, try again: ');
     else
         repeat = 0;
@@ -520,7 +556,7 @@ for i=1:pool_quantity
     pools_node_quantity(i,1) = input(strcat('size of pool number ',num2str(i),':'));
     repeat = 1;
     while repeat == 1
-        if pools_node_quantity(i,1) > nodes_quantity-1
+        if pools_node_quantity(i,1) > nodes_quantity_main-1
             pools_node_quantity(i,1) = input('make no sense, try again: ');
         else
             repeat = 0;
@@ -546,14 +582,14 @@ for i=1:pool_quantity
         repeat = 1;
         while repeat == 1
             [tmp_x,tmp_y]=ginput(1);
-            for k = 1:nodes_quantity
-                if tmp_x < nodes(k).x + MARKER_SIZE/2
-                    if tmp_x > nodes(k).x - MARKER_SIZE/2
-                        if tmp_y < nodes(k).y + MARKER_SIZE/2
-                            if tmp_y > nodes(k).y - MARKER_SIZE/2
-                                set(nodes(k).child,'Color',MARKER_CLUSTER_COLOR);
+            for k = 1:nodes_quantity_main
+                if tmp_x < nodes_main(k).x + MARKER_SIZE/2
+                    if tmp_x > nodes_main(k).x - MARKER_SIZE/2
+                        if tmp_y < nodes_main(k).y + MARKER_SIZE/2
+                            if tmp_y > nodes_main(k).y - MARKER_SIZE/2
+                                set(nodes_main(k).child,'Color',MARKER_CLUSTER_COLOR);
                                 pool_nodes(i,j) = k;
-                                nodes(k).pool_id = i;
+                                nodes_main(k).pool_id = i;
                                 repeat = 0;
                                 break;
                             end
@@ -571,13 +607,13 @@ for i=1:pool_quantity
     % set a colored frame arround the nodes
     pool_colors = rand(1,3); %random color for cluster identification
     for j=1:pools_node_quantity(i,1)
-        rectangle('Position', [nodes(pool_nodes(i,j)).x-MARKER_SIZE/2-5 ...
-            nodes(pool_nodes(i,j)).y-MARKER_SIZE/2-5 ...
+        rectangle('Position', [nodes_main(pool_nodes(i,j)).x-MARKER_SIZE/2-5 ...
+            nodes_main(pool_nodes(i,j)).y-MARKER_SIZE/2-5 ...
             MARKER_SIZE+10 MARKER_SIZE+10], ...
             'EdgeColor',pool_colors(1,:), ...
             'LineWidth', MARKER_LINE_WIDHT);
         tmp_child_data = get(gca,'Children');
-        set(nodes(pool_nodes(i,j)).child,'Color',MARKER_NORMAL_COLOR);
+        set(nodes_main(pool_nodes(i,j)).child,'Color',MARKER_NORMAL_COLOR);
     end
     
 end
@@ -590,31 +626,31 @@ node_count = 1;
 disp('mark the start node');
 while repeat == 1
     [tmp_x,tmp_y]=ginput(1);
-    for i = 1:nodes_quantity
-        if tmp_x < nodes(i).x + MARKER_SIZE/2
-            if tmp_x > nodes(i).x - MARKER_SIZE/2
-                if tmp_y < nodes(i).y + MARKER_SIZE/2
-                    if tmp_y > nodes(i).y - MARKER_SIZE/2
+    for i = 1:nodes_quantity_main
+        if tmp_x < nodes_main(i).x + MARKER_SIZE/2
+            if tmp_x > nodes_main(i).x - MARKER_SIZE/2
+                if tmp_y < nodes_main(i).y + MARKER_SIZE/2
+                    if tmp_y > nodes_main(i).y - MARKER_SIZE/2
                         start_node = i;
-                        way_time = sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-NODE_START_X_POSITION))^2 ...
-                            +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-NODE_START_Y_POSITION))^2)/ROBO_AVERAGE_SPEED;
-                        busy_node_time = ceil(nodes(start_node).time + way_time);
-                        set(nodes(i).child,'Color',MARKER_START_COLOR);
-                        set(nodes(i).weighttext,'Visible','off');
-                        text(nodes(i).x-5,nodes(i).y+5,num2str(node_count),'FontSize',20,'Color','w');
+                        way_time = sqrt((abs((nodes_main(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-NODE_START_X_POSITION))^2 ...
+                            +(abs((nodes_main(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-NODE_START_Y_POSITION))^2)/ROBO_AVERAGE_SPEED;
+                        busy_node_time = ceil(nodes_main(start_node).time + way_time);
+                        set(nodes_main(i).child,'Color',MARKER_START_COLOR);
+                        set(nodes_main(i).weighttext,'Visible','off');
+                        text(nodes_main(i).x-5,nodes_main(i).y+5,num2str(node_count),'FontSize',20,'Color','w');
                         
                         % if the start node a member of a pool, check if the pool is completed
-                        if nodes(start_node).pool_id ~= 0
-                            pools_node_quantity(nodes(start_node).pool_id,2) = pools_node_quantity(nodes(start_node).pool_id,2) - 1;
+                        if nodes_main(start_node).pool_id ~= 0
+                            pools_node_quantity(nodes_main(start_node).pool_id,2) = pools_node_quantity(nodes_main(start_node).pool_id,2) - 1;
 
-                            if pools_node_quantity(nodes(start_node).pool_id,2) == 0
-                                for j=1:nodes_quantity
-                                    check = find(pool_nodes(nodes(start_node).pool_id,:) == j);
-                                    if isempty(check) || j==start_node || nodes(j).child == 0  
+                            if pools_node_quantity(nodes_main(start_node).pool_id,2) == 0
+                                for j=1:nodes_quantity_main
+                                    check = find(pool_nodes(nodes_main(start_node).pool_id,:) == j);
+                                    if isempty(check) || j==start_node || nodes_main(j).child == 0  
                                     else
-                                        set(nodes(j).child,'Visible','off');
-                                        set(nodes(j).weighttext,'Visible','off');
-                                        nodes(j).child = 0; 
+                                        set(nodes_main(j).child,'Visible','off');
+                                        set(nodes_main(j).weighttext,'Visible','off');
+                                        nodes_main(j).child = 0; 
                                         node_count = node_count + 1; % count the completed nodes
                                     end
                                 end
@@ -638,8 +674,8 @@ end
 % init variables
 strategy_track_enemy_grid = zeros(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y, ...
     PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X);
-weight_history = zeros(NODE_QUANTITY,PLAY_TIME);
-time = zeros(NODE_QUANTITY,PLAY_TIME);
+weight_history = zeros(NODE_QUANTITY_MAIN,PLAY_TIME);
+time = zeros(NODE_QUANTITY_MAIN,PLAY_TIME);
 ww1 = 1;
 ww2 = 0;
 
@@ -664,95 +700,95 @@ for seconds = 1:PLAY_TIME
     figure(PLAYAREA);
     ww1 = (PLAY_TIME-seconds)/PLAY_TIME;
     ww2 = (PLAY_TIME-(PLAY_TIME-seconds))/PLAY_TIME;
-    for i = 1:nodes_quantity
+    for i = 1:nodes_quantity_main
         
         % destination node point-weight
-        switch nodes(i).arrive
+        switch nodes_main(i).arrive
             case NORTH
                 % class 4 weighting %
-                if nodes(i).y < nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                if nodes_main(i).y < nodes_main(start_node).y
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
-                elseif nodes(i).y >= nodes(start_node).y ...
-                        && nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                elseif nodes_main(i).y >= nodes_main(start_node).y ...
+                        && nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < nodes_main(start_node).y
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
-                elseif (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= nodes(start_node).y ...
-                        && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
-                        || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                elseif (nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= nodes_main(start_node).y ...
+                        && (nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes_main(start_node).x  ...
+                        || nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes_main(start_node).x )
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
                     
                 end
                 
             case EAST
                 % class 4 weighting %
-                if nodes(i).x > nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                if nodes_main(i).x > nodes_main(start_node).x
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
-                elseif nodes(i).x <= nodes(start_node).x ...
-                        && nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                elseif nodes_main(i).x <= nodes_main(start_node).x ...
+                        && nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > nodes_main(start_node).x
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
-                elseif nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x ...
-                        && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
-                        || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                elseif nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes_main(start_node).x ...
+                        && (nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes_main(start_node).y ...
+                        || nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes_main(start_node).y)
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
                     
                 end
                 
             case SOUTH
                 % class 4 weighting %
-                if nodes(i).y > nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                if nodes_main(i).y > nodes_main(start_node).y
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
-                elseif nodes(i).y <= nodes(start_node).y ...
-                        && nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                elseif nodes_main(i).y <= nodes_main(start_node).y ...
+                        && nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > nodes_main(start_node).y
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
-                elseif (nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= nodes(start_node).y ...
-                        && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
-                        || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                elseif (nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= nodes_main(start_node).y ...
+                        && (nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes_main(start_node).x  ...
+                        || nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes_main(start_node).x )
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
                     
                 end
                 
             case WEST
                 % class 4 weighting %
-                if nodes(i).x < nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                if nodes_main(i).x < nodes_main(start_node).x
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
-                elseif nodes(i).x >= nodes(start_node).x ...
-                        && nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                elseif nodes_main(i).x >= nodes_main(start_node).x ...
+                        && nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < nodes_main(start_node).x
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
-                elseif nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x ...
-                        && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
-                        || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                elseif nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes_main(start_node).x ...
+                        && (nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes_main(start_node).y ...
+                        || nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes_main(start_node).y)
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
                     
                 end
         end
@@ -760,19 +796,19 @@ for seconds = 1:PLAY_TIME
         
         % destination node enemy-weight
         w_enemy = strategy_track_enemy_grid(...
-        ceil(nodes(i).y/(PLAYGROUND_IMAGE_HEIGHT/(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y))),...
-        ceil(nodes(i).x/(PLAYGROUND_IMAGE_WIDTH/(PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X))));
-        nodes(i).weight = ww1 * w_dest + ww1 * w_enemy;
+        ceil(nodes_main(i).y/(PLAYGROUND_IMAGE_HEIGHT/(PLAYGROUND_HEIGHT/STRATEGY_TRACK_ENEMY_GRID_SIZE_Y))),...
+        ceil(nodes_main(i).x/(PLAYGROUND_IMAGE_WIDTH/(PLAYGROUND_WIDTH/STRATEGY_TRACK_ENEMY_GRID_SIZE_X))));
+        nodes_main(i).weight = ww1 * w_dest + ww1 * w_enemy;
 
         % source -> destination node distance-time weight
-        w_src_dest = sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
-         +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2)/ROBO_AVERAGE_SPEED;
+        w_src_dest = sqrt((abs((nodes_main(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes_main(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
+         +(abs((nodes_main(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes_main(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2)/ROBO_AVERAGE_SPEED;
 
         node_edge_weight(start_node,i) = ww1 * w_dest + ww1 * w_enemy + ww2 * w_src_dest;
         weight_history(i,seconds) = ww1 * w_dest + ww1 * w_enemy + w_src_dest;
         
         % plot weight informations            
-        set(nodes(i).weighttext,'String',num2str(node_edge_weight(start_node,i)));
+        set(nodes_main(i).weighttext,'String',num2str(node_edge_weight(start_node,i)));
     end
        
     
@@ -781,13 +817,13 @@ for seconds = 1:PLAY_TIME
     %
     % unselect the last next node
     if exist('next_node','var') == 1 && start_node ~= next_node.node
-        set(nodes(next_node.node).child,'Color',MARKER_NORMAL_COLOR);
+        set(nodes_main(next_node.node).child,'Color',MARKER_NORMAL_COLOR);
     end
     
     next_node.weight = inf;%node_edge_weight(start_node,1);
 
-    for i = 1:nodes_quantity
-        if nodes(i).child ~= 0 && i ~= start_node
+    for i = 1:nodes_quantity_main
+        if nodes_main(i).child ~= 0 && i ~= start_node
             % find the best node (lowest weight)
             if next_node.weight > node_edge_weight(start_node,i)
                 next_node.node = i;
@@ -797,7 +833,7 @@ for seconds = 1:PLAY_TIME
         end
     end
     
-    set(nodes(next_node.node).child,'Color',MARKER_NEXT_COLOR);
+    set(nodes_main(next_node.node).child,'Color',MARKER_NEXT_COLOR);
     
     % current node is done %
     if busy_node_time <= 0
@@ -806,30 +842,30 @@ for seconds = 1:PLAY_TIME
         % plot informations in playground
         figure(PLAYAREA);
         % draw route
-        plot([nodes(start_node).x nodes(next_node.node).x],[nodes(start_node).y nodes(next_node.node).y],LINE_TREE_COLOR,'LineWidth',2);
+        plot([nodes_main(start_node).x nodes_main(next_node.node).x],[nodes_main(start_node).y nodes_main(next_node.node).y],LINE_TREE_COLOR,'LineWidth',2);
         
         % disable the last and now completed node
-        set(nodes(start_node).child,'Visible','off');
-        set(nodes(start_node).weighttext,'Visible','off');
-        nodes(start_node).child = 0;
+        set(nodes_main(start_node).child,'Visible','off');
+        set(nodes_main(start_node).weighttext,'Visible','off');
+        nodes_main(start_node).child = 0;
         
         % goto next node
         start_node = next_node.node;
-        set(nodes(next_node.node).child,'Color',MARKER_START_COLOR);
-        text(nodes(next_node.node).x-5,nodes(next_node.node).y+5,num2str(node_count),'FontSize',20,'Color','w');
+        set(nodes_main(next_node.node).child,'Color',MARKER_START_COLOR);
+        text(nodes_main(next_node.node).x-5,nodes_main(next_node.node).y+5,num2str(node_count),'FontSize',20,'Color','w');
         
         % if the next node a member of a pool, check if the pool is completed
-        if nodes(start_node).pool_id ~= 0
-            pools_node_quantity(nodes(start_node).pool_id,2) = pools_node_quantity(nodes(start_node).pool_id,2) - 1;
+        if nodes_main(start_node).pool_id ~= 0
+            pools_node_quantity(nodes_main(start_node).pool_id,2) = pools_node_quantity(nodes_main(start_node).pool_id,2) - 1;
 
-            if pools_node_quantity(nodes(start_node).pool_id,2) == 0
-                for j=1:nodes_quantity
-                    check = find(pool_nodes(nodes(start_node).pool_id,:) == j);
-                    if isempty(check) || j==start_node || nodes(j).child == 0
+            if pools_node_quantity(nodes_main(start_node).pool_id,2) == 0
+                for j=1:nodes_quantity_main
+                    check = find(pool_nodes(nodes_main(start_node).pool_id,:) == j);
+                    if isempty(check) || j==start_node || nodes_main(j).child == 0
                     else
-                        set(nodes(j).child,'Visible','off');
-                        set(nodes(j).weighttext,'Visible','off');
-                        nodes(j).child = 0; 
+                        set(nodes_main(j).child,'Visible','off');
+                        set(nodes_main(j).weighttext,'Visible','off');
+                        nodes_main(j).child = 0; 
                         node_count = node_count + 1; % count the completed nodes
                     end
                 end
@@ -837,10 +873,10 @@ for seconds = 1:PLAY_TIME
         end
         
         %reset the busy-timer
-        busy_node_time = ceil(nodes(start_node).time + next_node.time); 
+        busy_node_time = ceil(nodes_main(start_node).time + next_node.time); 
          
         % check if still incomplete nodes avaiable
-        if node_count == nodes_quantity;
+        if node_count == nodes_quantity_main;
             break;
         end
     end
@@ -851,7 +887,7 @@ for seconds = 1:PLAY_TIME
     % result display
     %
     figure(PLAYAREA);
-    title(strcat('Spielfeld; verbleibende Knoten:',num2str(nodes_quantity-node_count), ...
+    title(strcat('Spielfeld; verbleibende Knoten:',num2str(nodes_quantity_main-node_count), ...
         '; Zeit: ',num2str(seconds),'s; Knotenzeit: ',num2str(busy_node_time),'s'));
     
     figure(NODEWEIGHT);
@@ -861,7 +897,7 @@ for seconds = 1:PLAY_TIME
     
     subplot(211);
     weight_handle = plot(seconds,weight_history(:,seconds),'o','LineWidth',2);
-    legend(weight_handle,'Fire 1','Fire 2','Fire 3','Fire Wall 1','Fire Wall 2','Fire Pool','Heart Fire 1','Heart Fire 2',...
+    legend(weight_handle,'Fire 1','Fire 2','Fire 3','Fire Wall 1','Fire Wall 2','Fire Pool',...
         'Net 1','Net 2','Net 3');
 end
 
