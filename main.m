@@ -34,7 +34,7 @@ PLAYGROUND_IMAGE_HEIGHT = size(PLAYGROUND_IMAGE,1);
 %%%%%%%%%%%%%%%%%%%%%%%%
 % global game settings %
 %%%%%%%%%%%%%%%%%%%%%%%%
-TEAMCOLOR = 0; % yellow := 0; red := 1
+TEAMCOLOR = 1; % yellow := 0; red := 1
 PLAY_TIME = 90; % time in seconds 
 ROBO_AVERAGE_SPEED = 0.5; % m/s
 TOTAL_POINTS = 21; % total points
@@ -298,6 +298,8 @@ if TEAMCOLOR == 1
     nodes(11).pool_id = 0; %ID of the pool
     nodes(11).child = 0;
     nodes(11).arrive = EAST;
+    nodes(11).angle = 0;
+    nodes(11).delta_angle = 20;
 % yellow %
 else
     % fire 4
@@ -527,6 +529,52 @@ for seconds = 1:PLAY_TIME
     ww1 = (PLAY_TIME-seconds)/PLAY_TIME;
     ww2 = (PLAY_TIME-(PLAY_TIME-seconds))/PLAY_TIME;
     for i = 1:nodes_quantity
+        
+        
+%         % source -> destination node distance weight
+%         w_src_dest = sqrt((abs((nodes(start_node).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes(i).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
+%          +(abs((nodes(start_node).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes(i).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2);
+% 
+%         r_factor = 1;
+%      
+%         if(w_src_dest > ARRIVE_NODE_FRAME/2)
+%             w_radius = r_factor/(w_src_dest^2);
+%         else
+%             w_radius = r_factor;
+%         end
+%         
+%         phi_factor_min = 1;
+%         phi_factor_max = 3;
+%         
+%         if nodes(start_node).x > nodes(i).x
+%             if nodes(start_node).y < nodes(i).y
+%                 phi = (atan(abs(nodes(start_node).y - nodes(i).y)/abs(nodes(start_node).x - nodes(i).x)))/pi*180 + 270;
+%             else
+%                 phi = (atan(abs(nodes(start_node).y - nodes(i).y)/abs(nodes(start_node).x - nodes(i).x)))/pi*180 + 0;
+%             end
+%         else
+%             if nodes(start_node).y < nodes(i).y
+%                 phi = (atan(abs(nodes(start_node).y - nodes(i).y)/abs(nodes(start_node).x - nodes(i).x)))/pi*180 + 180;
+%             else
+%                 phi = (atan(abs(nodes(start_node).y - nodes(i).y)/abs(nodes(start_node).x - nodes(i).x)))/pi*180 + 90;
+%             end         
+%         end
+%         
+%         if (nodes(i).angle + nodes(i).delta_angle/2) > 359 || (nodes(i).angle - nodes(i).delta_angle/2) < 0
+%             
+%         else
+%             if(phi <= (nodes(i).angle + nodes(i).delta_angle/2)) && (phi >= (nodes(i).angle - nodes(i).delta_angle/2))
+%                 w_phi = phi_factor_min;
+%             else
+%                 w_phi = 
+%             end
+%         end
+%         
+%         w_dest = w_phi + w_radius;
+        
+        
+        
+        
         
         % destination node point-weight
         switch nodes(i).arrive
