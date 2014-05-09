@@ -36,7 +36,7 @@ PLAYGROUND_IMAGE_HEIGHT = size(PLAYGROUND_IMAGE,1);
 % global game settings %
 %%%%%%%%%%%%%%%%%%%%%%%%
 TEAMCOLOR = 1; % yellow := 0; red := 1
-PLAY_TIME = 90; % time in seconds 
+PLAY_TIME = 70; % time in seconds 
 ROBO_AVERAGE_SPEED = 0.5; % m/s
 TOTAL_POINTS = 15; % total points (3x fire + 2x fire wall + net + 2x fire on heart
 PLAYGROUND_WIDTH = 3; % width in meter
@@ -46,12 +46,12 @@ PLAYGROUND_HEIGHT = 2; % height in meter
 % strategy settings %
 STRATEGY_TRACK_ENEMY_GRID_SIZE_X = 10e-2; %10cm
 STRATEGY_TRACK_ENEMY_GRID_SIZE_Y = 10e-2; %10cm
-STRATEGY_TRACK_CENTER_WEIGHT = 3;
-STRATEGY_TRACK_FRAME_WEIGHT = 2;
+STRATEGY_TRACK_CENTER_WEIGHT = 10;
+STRATEGY_TRACK_FRAME_WEIGHT = 5;
 STRATEGY_TRACK_TRESHHOLD = 5;
 
 % node settings %
-NODE_QUANTITY_MAIN = 9;
+NODE_QUANTITY_MAIN = 6;
 NODE_QUANTITY_SUB = 2;
 NODE_GRAPH_NO_SUB_ID = 0;
 NODE_GRAPH_SUB_ID = 1;
@@ -430,7 +430,7 @@ else
     nodes_main(6).weighttext = text(nodes_main(6).x-MARKER_SIZE,nodes_main(6).y+MARKER_SIZE+MARKER_LINE_WIDHT,'weight','Color','m');
     nodes_main(6).pool_id = 0; %ID of the pool
     nodes_main(6).child = 0;
-    nodes_main(6).arrive = WEST;
+    nodes_main(6).arrive = NORTH;
     nodes_main(6).sub = NODE_GRAPH_SUB_ID;
     
     % heart fire 1 %
@@ -708,88 +708,88 @@ for seconds = 1:PLAY_TIME
             case NORTH
                 % class 4 weighting %
                 if nodes_main(i).y < current_node.y
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes_main(i).y >= current_node.y ...
                         && nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < current_node.y
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif (nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= current_node.y ...
                         && (nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= current_node.x  ...
                         || nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= current_node.x )
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent);
                     
                 end
                 
             case EAST
                 % class 4 weighting %
                 if nodes_main(i).x > current_node.x
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes_main(i).x <= current_node.x ...
                         && nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > current_node.x
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= current_node.x ...
                         && (nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= current_node.y ...
                         || nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= current_node.y)
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent);
                     
                 end
                 
             case SOUTH
                 % class 4 weighting %
                 if nodes_main(i).y > current_node.y
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes_main(i).y <= current_node.y ...
                         && nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > current_node.y
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif (nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= current_node.y ...
                         && (nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= current_node.x  ...
                         || nodes_main(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= current_node.x )
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent);
                     
                 end
                 
             case WEST
                 % class 4 weighting %
                 if nodes_main(i).x < current_node.x
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 4;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes_main(i).x >= current_node.x ...
                         && nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < current_node.x
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 3;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif nodes_main(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= current_node.x ...
                         && (nodes_main(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= current_node.y ...
                         || nodes_main(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= current_node.y)
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent) * 2;
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes_main(i).points/nodes_main(i).time)*(1/nodes_main(i).percent);
+                    w_dest = (nodes_main(i).time/nodes_main(i).points)*(1/nodes_main(i).percent);
                     
                 end
         end
@@ -849,6 +849,7 @@ for seconds = 1:PLAY_TIME
         if w_sub_enemy_1 < w_sub_enemy_2
             w_src_dest = sqrt((abs((current_node.x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes_sub(1).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
                         +(abs((current_node.y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT-(nodes_sub(1).y*PLAYGROUND_HEIGHT)/PLAYGROUND_IMAGE_HEIGHT))^2)/ROBO_AVERAGE_SPEED;
+            
             next_node = nodes_sub(1);
         else
             w_src_dest = sqrt((abs((current_node.x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH-(nodes_sub(2).x*PLAYGROUND_WIDTH)/PLAYGROUND_IMAGE_WIDTH))^2 ...
@@ -870,9 +871,9 @@ for seconds = 1:PLAY_TIME
         plot([current_node.x next_node.x],[current_node.y next_node.y],LINE_TREE_COLOR,'LineWidth',2);
         
         % disable the last and now completed node
-        set(current_node.child,'Visible','off');
-        set(current_node.weighttext,'Visible','off');
-        current_node.child = 0;
+        set(nodes_main(current_node_index).child,'Visible','off');
+        set(nodes_main(current_node_index).weighttext,'Visible','off');
+        nodes_main(current_node_index).child = 0;
         
         
         % goto next node
