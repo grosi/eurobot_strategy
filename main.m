@@ -581,88 +581,88 @@ for seconds = 1:PLAY_TIME
             case NORTH
                 % class 4 weighting %
                 if nodes(i).y < nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes(i).y >= nodes(start_node).y ...
                         && nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT < nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) >= nodes(start_node).y ...
                         && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
                         || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent);
                     
                 end
                 
             case EAST
                 % class 4 weighting %
                 if nodes(i).x > nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes(i).x <= nodes(start_node).x ...
                         && nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH > nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x ...
                         && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
                         || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent);
                     
                 end
                 
             case SOUTH
                 % class 4 weighting %
                 if nodes(i).y > nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes(i).y <= nodes(start_node).y ...
                         && nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT > nodes(start_node).y
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif (nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT) <= nodes(start_node).y ...
                         && (nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x  ...
                         || nodes(i).x + (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH <= nodes(start_node).x )
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent);
                     
                 end
                 
             case WEST
                 % class 4 weighting %
                 if nodes(i).x < nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 4;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 4;
                 
                 % class 3 weighting %
                 elseif nodes(i).x >= nodes(start_node).x ...
                         && nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH < nodes(start_node).x
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 3;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 3;
                     
                 % class 2 weighting %
                 elseif nodes(i).x - (ARRIVE_NODE_FRAME/PLAYGROUND_WIDTH)*PLAYGROUND_IMAGE_WIDTH >= nodes(start_node).x ...
                         && (nodes(i).y - (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT >= nodes(start_node).y ...
                         || nodes(i).y + (ARRIVE_NODE_FRAME/PLAYGROUND_HEIGHT)*PLAYGROUND_IMAGE_HEIGHT <= nodes(start_node).y)
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent) * 2;
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent) * 2;
                     
                 % class 1 weighting %
                 else
-                    w_dest = (nodes(i).points/nodes(i).time)*(1/nodes(i).percent);
+                    w_dest = (nodes(i).time/nodes(i).points)*(1/nodes(i).percent);
                     
                 end
         end
